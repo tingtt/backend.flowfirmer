@@ -1,0 +1,99 @@
+from flask import Flask, jsonify, make_response, request
+import json
+import base64
+import pymysql
+import requests
+import time
+import datetime
+import hashlib#ハッシュ化用
+import jwt
+
+
+from setting import session# セッション変数の取得
+from user import *# Userモデルの取得
+
+app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False
+
+
+@app.route("/", methods=['GET'])
+def index():
+    return jsonify({"name": "Kantaro", "stand":"The World"})
+
+@app.route("/new_user_reg", methods=["POST"])
+def new_user_reg():
+    '''
+    受け取るJSON : user_info[]
+    {
+        "name": String,
+        "password": String,
+        "email": String
+    }
+    '''
+    start = time.time()#計測開始
+    user_info = json.loads(request.get_data().decode())
+
+    #user table にレコードの追加
+    user = User()
+    user.name = user_info['name']
+    user.password = hashlib.sha256(user_info['password'].encode()).hexdigest()
+    user.mail = user_info['email']
+
+    session.add(user)#insert
+    session.commit()#commit
+    session.flush()
+
+    jwt_payload['id'] = user.id
+
+    key = "secret_key_goes_here"
+    encoded = jwt.encode(jwtPayload, key, algorithm="HS256")
+    print(encoded)
+
+    elapsed_time = time.time() - start
+
+    return jsonify({
+        "token": encoded,
+        "elapsedTime": elapsed_time
+    })
+
+@app.route("/login", methods=["POST"])
+def login():
+    '''
+    受け取るjson: user_info[]
+    {
+        "email": mail,
+        "password": password
+    }
+    '''
+    start = time.time()
+    user_info = json.loads(request.get_data().decode())
+
+    user = User()#User テーブルレコード参照開始
+
+    auth_pass = session.query(User.password).\
+        filter(User.mail == user_info['email']).\
+            one()
+    
+    print(auth_pass[0]+"　は　"+str(user_info['email'])+"　のパスワード！！")
+
+    #パスワードをハッシュ化して比較
+    if hashlib.sha256(user_info['password'].encode()).hexdigest() == auth_pass[0]:
+
+
+        id = session.query(User).\
+            filter(User.mail == user_info['email']).\
+                one()
+        
+        print("変数idの中身は：", id)
+
+        session.close()
+
+        return jsonify({"message": "success"})
+    
+    session.close()
+    
+    return jsonify({"message": "failed to login"})
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0',port=5000, threaded=True, debug=True)

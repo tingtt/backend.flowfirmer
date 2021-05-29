@@ -40,8 +40,17 @@ def new_user_reg():
     user.mail = user_info['email']
 
     session.add(user)#insert
-    session.commit()#commit
     session.flush()
+    session.commit()#commit
+
+
+    '''
+    File "/projects/app.py", line 43, in new_user_reg
+    flask_1  |     session.flush()
+    flask_1  |   File "<string>", line 2, in flush
+
+    '''
+    
 
     jwt_payload['id'] = user.id
 
@@ -50,6 +59,8 @@ def new_user_reg():
     print(encoded)
 
     elapsed_time = time.time() - start
+
+    session.close()
 
     return jsonify({
         "token": encoded,

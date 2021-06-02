@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, make_response, request
+from flask import Flask, jsonify, make_response, request, abort
 import json
 import base64
 import pymysql
@@ -7,6 +7,7 @@ import time
 import datetime
 import hashlib#ハッシュ化用
 import jwt
+from sqlalchemy import exc
 
 
 from setting import session# セッション変数の取得
@@ -34,38 +35,49 @@ def new_user_reg():
     user_info = json.loads(request.get_data().decode())
 
     #user table にレコードの追加
-    user = User()
-    user.name = user_info['name']
-    user.password = hashlib.sha256(user_info['password'].encode()).hexdigest()
-    user.mail = user_info['email']
+    try:
+        user = User()
+        user.name = user_info['name']
+        user.password = hashlib.sha256(user_info['password'].encode()).hexdigest()
+        user.mail = user_info['email']
 
-    session.add(user)#insert
-    session.flush()
-    session.commit()#commit
+        session.add(user)#insert
+        session.flush()
+        session.commit()#commit
+
+        jwt_payload={}
+
+        jwt_payload['id'] = user.id
+
+        key = "secret_key_goes_here"
+        encoded = jwt.encode(jwt_payload, key, algorithm="HS256")
+        print(encoded)
+
+        elapsed_time = time.time() - start
+
+        session.close()
+
+        return jsonify({
+            "status": 200,
+            "token": encoded,
+            "elapsedTime": elapsed_time
+        })
+    except exc.SQLAlchemyError as e:
+        message = None
+        if type(e) is exc.IntegrityError:
+            message = "メールアドレスがすでに登録されています"
+            elapsed_time = time.time() - start
+            print(type(e))
+            return jsonify({
+                "status": 400,
+                "message": message,
+                "elapsedTime": elapsed_time
+            })
+        elapsed_time = time.time() - start
+        return jsonify({"status":400, "massage":"DBに問題あるかも", "elapsedTime": elapsed_time})
 
 
-    '''
-    File "/projects/app.py", line 43, in new_user_reg
-    flask_1  |     session.flush()
-    flask_1  |   File "<string>", line 2, in flush
 
-    '''
-    
-
-    jwt_payload['id'] = user.id
-
-    key = "secret_key_goes_here"
-    encoded = jwt.encode(jwtPayload, key, algorithm="HS256")
-    print(encoded)
-
-    elapsed_time = time.time() - start
-
-    session.close()
-
-    return jsonify({
-        "token": encoded,
-        "elapsedTime": elapsed_time
-    })
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -91,19 +103,39 @@ def login():
     if hashlib.sha256(user_info['password'].encode()).hexdigest() == auth_pass[0]:
 
 
-        id = session.query(User).\
+        id = session.query(User.id).\
             filter(User.mail == user_info['email']).\
                 one()
         
         print("変数idの中身は：", id)
+        print("変数idの中身は：", id[0])
+        #print("変数idの中身は：", len(id))
+        jwt_payload={}
+
+        jwt_payload['id'] = id[0]
+
+        key = "secret_key_goes_here"
+        encoded = jwt.encode(jwt_payload, key, algorithm="HS256")
+        print(encoded)
+        session.close()
+        elapsed_time = time.time() - start
+
+
 
         session.close()
 
-        return jsonify({"message": "success"})
+        return jsonify({
+                    "status": 200,
+                    "token": encoded,
+                    "elapsedTime": elapsed_time
+                })
     
     session.close()
     
-    return jsonify({"message": "failed to login"})
+    return jsonify({
+            "status": 400,
+            "message": "failed to login"
+            })
 
 
 if __name__ == "__main__":

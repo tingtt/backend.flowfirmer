@@ -1,0 +1,17 @@
+POST http://localhost:4002/newUserReg
+content-type: application/json
+
+{
+    "email": "nodejs.example.com",
+    "password": "Kan272420",
+    "name": "Mr. ノードJS"
+}
+
+###
+
+POST http://localhost:4002/newUserReg
+content-type: application/json
+
+{
+    "message": "hello api-gateway"
+}

@@ -12,11 +12,10 @@ class User(Base):
     user テーブル用
     """
     __tablename__ = 'user'
-    id = Column('user_id', Integer, primary_key=True, autoincrement=true)
+    id = Column('user_id', Integer, primary_key=True)
     name = Column('user_name', String(200))
-    password = Column('password', String(255))#
-    mail = Column('mail', String(200))
-
+    password = Column('password', String(255))
+    mail = Column('mail', String(200), unique=True)
 
 def main(args):
     """

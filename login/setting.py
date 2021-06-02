@@ -4,7 +4,6 @@ from sqlalchemy.ext.declarative import declarative_base
 import pymysql
 
 
-
 # mysqlのDBの設定
 DATABASE = 'mysql+pymysql://%s:%s@%s/%s?charset=utf8' % (
     "root",

@@ -60,7 +60,7 @@ def new_user_reg():
         return jsonify({
             "status": 200,
             "token": encoded,
-            "elapsedTime": elapsed_time
+            "elapsedTimeOfLoginService": elapsed_time
         })
     except exc.SQLAlchemyError as e:
         message = None

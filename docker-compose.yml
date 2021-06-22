@@ -75,6 +75,32 @@ services:
     restart: "no"
     depends_on: 
       - mongo
+  
+  rabbit:
+    image: rabbitmq:3.8.5-management
+    container_name: rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    expose:
+      - "5672"
+      - "15672"
+    restart: always
 
+  ongoing-data:
+    image: statistics
+    build: 
+      context: ./statistics
+      dockerfile: Dockerfile
+    container_name: statistics
+    ports:
+    - "4004:4004"
+    environment:
+    - DBHOST=mongodb://mongo:27017
+    - PORT=4004
+    restart: "no"
+    depends_on: 
+    - mongo
+    
 
 

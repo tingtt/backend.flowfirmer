@@ -1,3 +1,3 @@
-api-gateway でのjwt 解析
-
-ongoing-data 実装
+rabbitMQ での　キューの送信実装
+ongoing-data schema 設計詳細
+ongoing-data　mongo 実装

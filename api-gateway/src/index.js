@@ -1,7 +1,6 @@
 const express = require("express");
 var request = require("request");
 const bodyParser = require('body-parser');
-const { Error } = require("mongoose");
 const jwt = require('jsonwebtoken')
 require("date-util")
 
@@ -47,10 +46,29 @@ const NEW_USER_REG_PATH = "/new_user_reg";
 const USER_LOGIN_PATH = "/login";
 const ONGOING_DATA_HOST = process.env.ONGOING_DATA_HOST;
 const ONGOING_DATA_PORT = parseInt(process.env.ONGOING_DATA_PORT);
+const ONGOING_DATA_TEST_PATH = "/test";
 
  
 
 console.log(`Forwarding login requests to ${LOGIN_HOST}:${LOGIN_PORT}.`);
+
+var jwtDecription = (id) => {
+    console.log("here is inside of jwtDecription function")
+    console.log(id)
+    const token = id
+    const jwtSecret = "secret_key_goes_here"
+    var id = 0
+    jwt.verify( token, jwtSecret, (err, decoded) => {
+        if (err) {
+            console.log( `ERROR: err.message=[${err.message}]` );
+        } else {
+            console.log( `OK: decoded.id=${decoded.id}` );
+            id = decoded.id
+        }
+    });
+
+    return id
+}
 
 
 app.post("/newUserReg", (req, res) => {
@@ -133,13 +151,32 @@ app.post('/toOngoingData' , (req , res)=>{
     }
     */
 
-    console.log("API-GATEWAY:newUserReg strating!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    console.log("API-GATEWAY:toOngoingData strating!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     //console.log(req.body.message)
     let postData = req.body;
-    console.log("API-GATEWAY:newUserReg 最初取得したJson＝"+postData)
     let postDataStr = JSON.stringify(postData);
-    console.log("API-GATEWAY:newUserReg postDataStr="+postDataStr)
-    console.log("API-GATEWAY:newUserReg forwarding to login service "+LOGIN_HOST+":"+LOGIN_PORT)
+    console.log("API-GATEWAY:toOngoingData postDataStr="+postDataStr)
+    console.log("API-GATEWAY:toOngoingData forwarding to login service "+ONGOING_DATA_HOST+":"+ONGOING_DATA_PORT)
+    var id = jwtDecription(req.body.token)
+    console.log(id)
+    var jsonToOngoingData = {"id": id}
+    var options = {
+        uri: "http://"+ONGOING_DATA_HOST+":"+ONGOING_DATA_PORT+ONGOING_DATA_TEST_PATH,
+        headers: {
+          "Content-type": "application/json",
+        },
+        json: jsonToOngoingData
+    };
+
+    var temp;
+    request.post(options, (error, response, body) => {
+        if (error) return console.log("API-GATEWAY:login post return error")
+
+        temp = JSON.stringify(response.body)
+        console.log("API-GATEWAY:login 返ってきた値="+String(temp))
+        res.json(response.body)
+    
+    });
 
 
 

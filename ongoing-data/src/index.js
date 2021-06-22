@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require('body-parser')
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 require('mongoose-type-url')
 
 
@@ -11,7 +12,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 const PORT = process.env.PORT;
-const PORT = process.env.DBHOST
+const DBHOST = process.env.DBHOST
 
 mongoose.connect(
     DBHOST+'/test',
@@ -22,7 +23,7 @@ mongoose.connect(
 
 //target内の成果リスト内のスキーマ
 //targetValue: undefined,
-const sampleOutcomeScheme = new mongoose.Schema({
+const sampleOutcomeScheme = new Schema({
     id: Number,
     user_id: Number,
     target_id: Number,
@@ -39,105 +40,103 @@ const sampleOutcomeScheme = new mongoose.Schema({
     parentTarget: undefined
 
 */
-const TargetSchema = new mongoose.Schema({
-    id: Number,
-    user_id: Number,
-    name: String,
-    themeColor: String,
-    outcomeSchemes: [sampleOutcomeScheme]
-});
+// const TargetSchema = new Schema({
+//     id: Number,
+//     user_id: Number,
+//     name: String,
+//     themeColor: String,
+//     outcomeSchemes: [sampleOutcomeScheme]
+// });
 
-/*
-    ToDoリスト用スキーマ
-    term: undefined
-*/
-const ToDoSchema = new mongoose.Schema({
-    id: Number,
-    user_id: Number,
-    name: String,
-    description: String,
-    startDatetimeScheduled: Date,
-    timeInfoExisted: Boolean,
-    processingTimeScheduled: Number,
-    repeatPattern: String,
-    repeatDayForWeekly: [],
-    targetList: [TargetSchema],
-    completed: true
+// /*
+//     ToDoリスト用スキーマ
+//     term: undefined
+// */
+// const ToDoSchema = new Schema({
+//     id: Number,
+//     user_id: Number,
+//     name: String,
+//     description: String,
+//     startDatetimeScheduled: Date,
+//     timeInfoExisted: Boolean,
+//     processingTimeScheduled: Number,
+//     repeatPattern: String,
+//     repeatDayForWeekly: [],
+//     targetList: [TargetSchema],
+//     completed: true
 
-});
+// });
 
-/*
-    term用スキーマ
-    term: undefined
-    documentList: undefined
-*/
+// /*
+//     term用スキーマ
+//     term: undefined
+//     documentList: undefined
+// */
 
-const TermSchema = new mongoose.Schema({
-    id: Number,
-    user_id: Number,
-    name: String,
-    description: String,
-    targetList: [TargetSchema],
-    startDatetimeScheduled: Date,
-    endDatetimeScheduled: Date,
-    startDatetime: Date,
-    toDoList:[ToDoSchema],
+// const TermSchema = new Schema({
+//     id: Number,
+//     user_id: Number,
+//     name: String,
+//     description: String,
+//     targetList: [TargetSchema],
+//     startDatetimeScheduled: Date,
+//     endDatetimeScheduled: Date,
+//     startDatetime: Date,
+//     toDoList:[ToDoSchema],
 
-});
+// });
 
-const Document = new mongoose.Schema({
-    id: Number,
-    user_id: Number,
-    name: String,
-    url: mongoose.SchemaTypes.Url,
-    targetList: [TargetSchema]
-})
+// const Document = new Schema({
+//     id: Number,
+//     user_id: Number,
+//     name: String,
+//     url: mongoose.SchemaTypes.Url,
+//     targetList: [TargetSchema]
+// })
 
-const sampleHabitRemind = new mongoose.Schema({
-    id: Number,
-    user_id: Number,
-    name: String,
-    target: TargetSchema
-})
+// const sampleHabitRemind = new Schema({
+//     id: Number,
+//     user_id: Number,
+//     name: String,
+//     target: TargetSchema
+// })
 
-const FeelingType = new mongoose.Schema({
-    id: Number,
-    user_id: Number,
-    name: String,
-    defaultPositivePercent: Number,
-    defaultNegativePercent: Number
-})
-const Archive = new mongoose.Schema({
-    id: Number,
-    user_id: Number,
-    refType: String,
-    ref: ToDoSchema,
-    targets: [TargetSchema],
-    outcomes:[
-        {
-            Scheme: sampleOutcomeScheme,
-            value: Number
-        }
-    ],
-    text: String,
-    feelingList:[
-        {
-            feeling: FeelingType,
-            positivePercent: Number,
-            negativePercent: Number
-        }
-    ],
+// const FeelingType = new Schema({
+//     id: Number,
+//     user_id: Number,
+//     name: String,
+//     defaultPositivePercent: Number,
+//     defaultNegativePercent: Number
+// },{timestamps : true})
+// const Archive = new Schema({
+//     id: Number,
+//     user_id: Number,
+//     refType: String,
+//     ref: ToDoSchema,
+//     targets: [TargetSchema],
+//     outcomes:[
+//         {
+//             Scheme: sampleOutcomeScheme,
+//             value: Number
+//         }
+//     ],
+//     text: String,
+//     feelingList:[
+//         {
+//             feeling: FeelingType,
+//             positivePercent: Number,
+//             negativePercent: Number
+//         }
+//     ],
 
-    datetime: Date
+//     datetime: Date
 
-})
+// })
 
-app.post("/newUserReg", (req, res) => {
+app.post("/test", (req, res) => {
     /*受け取るjson（テスト）
     {
-        "name": "Mr. ノードJS",
-        "password": "Kan272420",
-        "email": "nodejs.example.com"
+        "id":int 
     }
     */
     console.log("ONGOING-DATA:test strating!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -146,6 +145,8 @@ app.post("/newUserReg", (req, res) => {
     console.log("AONGOING-DATA:newUserReg 最初取得したJson＝"+postData)
     let postDataStr = JSON.stringify(postData);
     console.log("ONGOING-DATA:newUserReg postDataStr="+postDataStr)
+    var id = req.body.id
+    console.log("id====="+id)
 
 
     

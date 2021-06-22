@@ -27,3 +27,11 @@ Content-Type: application/json
     "email": "api_gateway@example.com",
     "password": "api-gateway"
 }
+
+###
+POST http://localhost:4002/toOngoingData
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
+}

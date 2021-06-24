@@ -37,6 +37,21 @@ mongoose.connect(
 );
 
 amqp.connect(RABBIT, function(error0, connection) {
+    /*ERROR メッセージ
+ongoing-data    | /usr/src/app/src/index.js:41
+ongoing-data    |         throw error0;
+ongoing-data    |         ^
+ongoing-data    | 
+ongoing-data    | Error: connect ECONNREFUSED 172.19.0.3:5672
+ongoing-data    |   at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1141:16) {
+ongoing-data    |   errno: 'ECONNREFUSED',
+ongoing-data    |   code: 'ECONNREFUSED',
+ongoing-data    |   syscall: 'connect',
+ongoing-data    |   address: '172.19.0.3',
+ongoing-data    |   port: 5672
+ongoing-data    | }
+
+    */
     if (error0) {
         throw error0;
     }

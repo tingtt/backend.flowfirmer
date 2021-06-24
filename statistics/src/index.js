@@ -31,6 +31,21 @@ app.use(bodyParser.json());
 
 //rabbit からメッセージ取得（テスト） 
 amqp.connect(RABBIT, function(error0, connection) {
+    /*EROOR メッセージ
+     /usr/src/app/src/index.js:35
+statistics      |throw error0;
+statistics      |         ^
+statistics      | 
+statistics      | Error: connect ECONNREFUSED 172.19.0.3:5672
+statistics      |     at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1141:16) {
+statistics      |   errno: 'ECONNREFUSED',
+statistics      |   code: 'ECONNREFUSED',
+statistics      |   syscall: 'connect',
+statistics      |   address: '172.19.0.3',
+statistics      |   port: 5672
+statistics      | }
+
+    */
     if (error0) {
         throw error0;
     }

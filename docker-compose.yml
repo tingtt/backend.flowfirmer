@@ -60,6 +60,16 @@ services:
       TZ: Asia/Tokyo
     volumes:
       - ./mongo_db:/data/db
+  rabbit:
+    image: rabbitmq:3.8.5-management
+    container_name: rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    expose:
+      - "5672"
+      - "15672"
+    restart: always
   
   ongoing-data:
     image: ongoing-data
@@ -72,22 +82,13 @@ services:
     environment:
     - DBHOST=mongodb://mongo:27017
     - PORT=4003
+    - RABBIT=amqp://guest:guest@rabbit:5672
     restart: "no"
     depends_on: 
       - mongo
-  
-  rabbit:
-    image: rabbitmq:3.8.5-management
-    container_name: rabbit
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    expose:
-      - "5672"
-      - "15672"
-    restart: always
+      - rabbit
 
-  ongoing-data:
+  statistics:
     image: statistics
     build: 
       context: ./statistics
@@ -98,9 +99,11 @@ services:
     environment:
     - DBHOST=mongodb://mongo:27017
     - PORT=4004
+    - RABBIT=amqp://guest:guest@rabbit:5672
     restart: "no"
     depends_on: 
     - mongo
+    - rabbit
     
 
 

@@ -13,21 +13,21 @@ services:
       TZ: Asia/Tokyo
     command: python /projects/app.py
   
-  api-gateway:
-    image: api-gateway
-    build: 
-      context: ./api-gateway
-      dockerfile: Dockerfile
-    container_name: api-gateway
-    ports:
-    - "4002:4002"
-    environment:
-    - PORT=4002
-    - LOGIN_HOST=flask
-    - LOGIN_PORT=5000
-    - ONGOING_DATA_HOST=ongoing-data
-    - ONGOING_DATA_PORT=4003
-    restart: "no"
+  # api-gateway:
+  #   image: api-gateway
+  #   build: 
+  #     context: ./api-gateway
+  #     dockerfile: Dockerfile
+  #   container_name: api-gateway
+  #   ports:
+  #   - "4002:4002"
+  #   environment:
+  #   - PORT=4002
+  #   - LOGIN_HOST=flask
+  #   - LOGIN_PORT=5000
+  #   - ONGOING_DATA_HOST=ongoing-data
+  #   - ONGOING_DATA_PORT=4003
+  #   restart: "no"
 
   db:
     image: mysql:5.7
@@ -48,7 +48,7 @@ services:
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
 
   mongo:
-    image: mongo
+    image: mongo:4.2.0
     container_name: mongo
     restart: always
     ports:
@@ -56,21 +56,12 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: ecc
-      MONGO_INITDB_DATABASE: basicData
+      MONGO_INITDB_DATABASE: test
       TZ: Asia/Tokyo
     volumes:
-      - ./mongo_db:/data/db
-  rabbit:
-    image: rabbitmq:3.8.5-management
-    container_name: rabbit
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    expose:
-      - "5672"
-      - "15672"
-    restart: always
-  
+      - ./mongo/db:/data/db
+      - ./mongo/configdb:/data/configdb
+      - ./mongo/init:/docker-entrypoint-initdb.d
   ongoing-data:
     image: ongoing-data
     build: 
@@ -80,30 +71,16 @@ services:
     ports:
     - "4003:4003"
     environment:
-    - DBHOST=mongodb://mongo:27017
+    - DBHOST=mongo
+    - DBPORT=27017
     - PORT=4003
-    - RABBIT=amqp://guest:guest@rabbit:5672
+    - LOGIN_HOST=flask
+    - LOGIN_PORT=5000
     restart: "no"
     depends_on: 
       - mongo
-      - rabbit
 
-  statistics:
-    image: statistics
-    build: 
-      context: ./statistics
-      dockerfile: Dockerfile
-    container_name: statistics
-    ports:
-    - "4004:4004"
-    environment:
-    - DBHOST=mongodb://mongo:27017
-    - PORT=4004
-    - RABBIT=amqp://guest:guest@rabbit:5672
-    restart: "no"
-    depends_on: 
-    - mongo
-    - rabbit
+
     
 
 

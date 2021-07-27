@@ -135,9 +135,7 @@ module.exports = class models{
             id : Number,
             name : String
         });
-
         const test = mongoose.model('test', testSchema)
-
         return test
     }
 
@@ -153,158 +151,139 @@ module.exports = class models{
             userId : Number,
             name : String,
             themeColor : String,
-
             outcomes : [{
-                objectId : String,
-                usreId : Number,
-                targetId : String,
                 name : String,
                 unitName : String,
                 statisticsRule : String,
                 defaultValue : Number
             }],
-
             pinnedAtNavigationList : Boolean,
             hiddenAtNavigationList : Boolean
 
         });
-        
         const target = mongoose.model('targets', targetSchema)
-
         return target
-
     }
 
-    // documentModel(){
-    //     /*
-    //     uri : String のほうがいい？
-    //     tergetList [targetSchema] 注意事項 at 162 
-    //     */
-    //     const documentSchema = new mongoose.Schema({
-    //         userId : Number,
-    //         name : String,
-    //         uri : mongoose.SchemaTypes.Url,
-    //         targetList : [{
-    //             objectId : String,
-    //             userId : Number,
-    //             name : String,
-    //             themeColor : String,
+    documentModel(){
+        const documentSchema = new mongoose.Schema({
+            userId : Number,
+            name : String,
+            uri : String,
+            targetId : String
+        })
+        const document = mongoose.model('documents', documentSchema)
+        return document
+    }
 
-    //             outcomes : [{
-    //                 objectId : String,
-    //                 usreId : Number,
-    //                 targetId : String,
-    //                 name : String,
-    //                 unitName : String,
-    //                 statisticsRule : String,
-    //                 defaultValue : Number
-    //             }],
+    termModel(){
+        /*
+        targetList => targetSchema({})
+        */
+        const termSchema = new mongoose.Schema({
+            userId : Number,
+            name : String,
+            description : String,
+            targetList : [],
+            startDatetimeScheduled: Date,
+            endDatetimeScheduled: Date,
+            startDatetime: Date
+        })
+        const term = mongoose.model('terms', termSchema)
+        return term
+    }
 
-    //             pinnedAtNavigationList : Boolean,
-    //             hiddenAtNavigationList : Boolean
-    //         }]
+    todoModel(){
+        const todoSchema = new mongoose.Schema({
+            userId : Number,
+            name : String,
+            startDatetimeScheduled : Date,
+            timeInfoExisted : Boolean,
+            processingTimeScheduled : Number,
+            repeatPattern : String,
+            repeatDayForWeekly : [],
+            targetList : [],
+            term : String,
+            completed : Boolean
+        })
+        const todo = mongoose.model('todos', todoSchema)
+        return todo
+    }
 
-    //     })
+    habitModel(){
+        const habitSchema = new mongoose.Schema({
+            userId : Number,
+            name : String,
+            target : String
+        })
+        const habit = mongoose.model('habits', habitSchema)
+        return habit
+    }
 
-    //     const document = mongoose.model('test', documentSchema)
+    todoArchiveModel(){
+        /*
+        {
+            _id: String,
+            userId: number,
+            todoId: String,
+            checkInDateTime: Date,
+            targets: [],
+            statistics: [
+                [
+                    {
+                        tagetId: String,
+                        name: String,
+                        unitname: String,
+                        statisticsRule: String,
+                        defaultValue: Number,
+                        value: Number,
+                        feelingText: String,
+                        feelingName: String,
+                        positivePercent: Number,
+                        negativePercent: Number,
+                        recordingDateTime: Date
+                    },    
+                ],
+                [
+                    {
+                        tagetId: String,
+                        name: String,
+                        unitname: String,
+                        statisticsRule: String,
+                        defaultValue: Number,
+                        value: Number,
+                        feelingText: String,
+                        feelingName: String,
+                        positivePercent: Number,
+                        negativePercent: Number,
+                        recordingDateTime: Date
+                    }, 
+                ]
+            ]   
+        }
+        */
+        const todoArchiveSchema = new mongoose.Schema({
+            
+        })
+    }
 
-    //     return document
-    // }
+    habitArchiveModel(){
+        const habitArchiveSchema = new mongoose.Schema({
 
-    // termModel(){
-    //     /*
-    //     targetList => targetSchema({})
+        })
+    }
 
-    //     */
-    //     const termSchema = new mongoose.Schema({
-    //         usrId : Number,
-    //         name : String,
-    //         description : String,
+    diaryArchiveModel(){
+        const diaryArchiveSchema = new mongoose.Schema({
 
-    //         targetList : [{
-    //             objectId : String,
-    //             userId : Number,
-    //             name : String,
-    //             themeColor : String,
-
-    //             outcomes : [{
-    //                 objectId : String,
-    //                 usreId : Number,
-    //                 targetId : String,
-    //                 name : String,
-    //                 unitName : String,
-    //                 statisticsRule : String,
-    //                 defaultValue : Number
-    //             }],
-
-    //             pinnedAtNavigationList : Boolean,
-    //             hiddenAtNavigationList : Boolean
-    //         }],
-
-    //         startDatetimeScheduled: Date,
-    //         endDatetimeScheduled: Date,
-    //         startDatetime: Date,
-
-    //         documentList: [{
-    //             objectId : String,
-    //             userId : Number,
-    //             name : String,
-    //             uri : mongoose.SchemaTypes.Url,
-    //             targetList : [{
-    //                 objectId : String,
-    //                 userId : Number,
-    //                 name : String,
-    //                 themeColor : String,
-
-    //                 outcomes : [{
-    //                     objectId : String,
-    //                     usreId : Number,
-    //                     targetId : String,
-    //                     name : String,
-    //                     unitName : String,
-    //                     statisticsRule : String,
-    //                     defaultValue : Number
-    //                 }],
-
-    //                 pinnedAtNavigationList : Boolean,
-    //                 hiddenAtNavigationList : Boolean
-    //             }]
-    //         }]
-
-    //     })
-
-    //     const term = mongoose.model('test', targetSchema)
-
-    //     return term
-    // }
-
-    // todoModel(){
-    //     const todoSchema = mongoose.Schema({
-    //         userId : Number,
-    //         name : String,
-    //         startDatetimeScheduled : Date,
-    //         processingTimeScheduled : Number,
-    //         repeatPattern : String,
-    //         repeatDayForWeekly : [],
-    //         targetList : [],
-    //         term : [],
-    //         completed : Boolean
-
-    //     })
-
-    //     const todo = mongoose.model('test', todoSchema)
-
-    //     return todo
-    // }
-
-    // /*
-    // target の所String に変更
-    // */
-    // habitsRemindModel(){
-    //     const habitsRemindSchema = mongoose.Schema({
-    //         userId : Number,
-    //         name : String,
-    //         target : String
-    //     })
-    // }
+        })
+    }
 }
+
+/*
+todo archive 
+
+habit archive
+
+diary
+*/

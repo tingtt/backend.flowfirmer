@@ -35,7 +35,7 @@ Content-Type: application/json
 {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
     "data":{
-        "name" : "request from .rest"
+        "name" : "request wwwwwwwwwwww"
     }
     
 }
@@ -56,11 +56,334 @@ Content-Type: application/json
 {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
     "data" :{
-        "_id": "60ecfbbc3fbe8ec1990a251a",
-        "name": "変更したよーーーーーー！！",
+        "_id": "60ecfa73a00e25a7c744dcd4",
+        "name": "変更したよーーーーーーppppppppppp！！",
         "id": 3
     }
 }
+
+###
+POST http://localhost:4003/deleteTestByObjectId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data" :{
+        "_id": "60f19706a9521a5967d56594"
+    }
+}
+
+###
+POST http://localhost:4003/saveTarget
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "name" : "筋トレ（テスト）",
+        "themeColor" : "#1abc9c",
+        "outcomes" : [
+            {
+                "name" : "スクワット",
+                "unitName" : "回",
+                "statisticsRule" : "Max",
+                "defaultValue" : 20
+            },
+            {
+                "name" : "腹筋",
+                "unitName" : "回",
+                "statisticsRule" : "Max",
+                "defaultValue" : 20
+            }
+        ],
+        "pinnedAtNavigationList" : true,
+        "hiddenAtNavigationList" : true
+    }
+}
+
+
+###
+POST http://localhost:4003/getTarget
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
+}
+
+###
+
+POST http://localhost:4003/updateTarget
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "_id": "60ef914ff7af2723ca26ff9b",
+        "name" : "変更（テスト）",
+        "themeColor" : "be-",
+        "outcomes" : [
+            {
+                "name" : "変更",
+                "unitName" : "変更",
+                "statisticsRule" : "変更",
+                "defaultValue" : 100
+            },
+            {
+                "name" : "腹筋",
+                "unitName" : "回",
+                "statisticsRule" : "Max",
+                "defaultValue" : 20
+            }
+        ],
+        "pinnedAtNavigationList" : true,
+        "hiddenAtNavigationList" : true
+    }
+}
+
+
+###
+POST http://localhost:4003/deleteTarget
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data" :{
+        "_id": "60ef914ff7af2723ca26ff9b"
+    }
+}
+
+###
+
+POST http://localhost:4003/saveDocument
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "name": "testDocument!!!!!",
+        "uri": "https://hirauchi-genta.com/kotlin-switch/",
+        "targetId": "60ef8fc17540ec361fa9a3df"
+    }
+}
+
+###
+POST http://localhost:4003/getDocumentByUserId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
+}
+
+###
+
+POST http://localhost:4003/updateDocument
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "_id": "60f1988c228f6a76e76ebb33",
+        "name": "testUpdateDocument!!!!!",
+        "uri": "https://gitlab.iroha-s.jp/techlid/front-end/-/blob/webapp/utils/sample-data.ts",
+        "targetId": "60ef8fc17540ec361fa9a3df"
+    }
+}
+
+###
+
+POST http://localhost:4003/deleteDocument
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "_id": "60f1b75e3b329f3c6b26ef8e"
+    }
+}
+
+
+###
+
+POST http://localhost:4003/saveTerm
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "name": "testTerm2",
+        "description": "testDescription2",
+        "targetList": ["4529dkdd", "sjahfdkldl"],
+        "startDatetimeScheduled": "2002-12-09",
+        "endDatetimeScheduled": "2020-12-14",
+        "startDatetime": "2020-12-30"
+    }
+}
+
+###
+
+POST http://localhost:4003/getTermByUserId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
+}
+
+###
+
+POST http://localhost:4003/updateTerm
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "_id": "60f73de83dd4244de97b262f",
+        "name": "testUpdateTerm2",
+        "description": "testUpdateDescription2",
+        "targetList": ["updated", "updated2"],
+        "startDatetimeScheduled": "2021-12-01",
+        "endDatetimeScheduled": "2021-12-19",
+        "startDatetime": "2021-12-30"
+    }
+}
+
+###
+
+POST http://localhost:4003/deleteTermByObjectId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "_id": "60f73aac51f18e02ece8ab53"
+    }
+}
+
+###
+
+POST http://localhost:4003/saveTodo
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "name": "testsaveTodo3!!!",
+        "startDatetimeScheduled": "2021-12-01T03:24:00",
+        "timeInfoExisted": true,
+        "processingTimeScheduled": 23,
+        "repeatPattern": "weekly",
+        "repeatDayForWeekly": [1, 2],
+        "targetList": ["test1.2", "test2.2"],
+        "term": "testtestesttestest2",
+        "completed": true
+    }
+}
+
+###
+
+POST http://localhost:4003/getTodoByUserId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
+}
+
+###
+
+POST http://localhost:4003/updateTodoByObjectId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+         "_id": "60f74e312bd6654da0c1ab5f",
+        "name": "testupdateTodo2!!!",
+        "startDatetimeScheduled": "2021-12-01T03:24:00",
+        "timeInfoExisted": true,
+        "processingTimeScheduled": 100,
+        "repeatPattern": "weekly",
+        "repeatDayForWeekly": [3, 4],
+        "targetList": ["update1.2", "update2.2"],
+        "term": "updateupdate",
+        "completed": true
+    }
+}
+
+###
+
+POST http://localhost:4003/deleteTodoByObjectId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "_id": "60f74e312bd6654da0c1ab5f"
+    }
+}
+
+###
+
+POST http://localhost:4003/saveHabit
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "name": "testSaveHabit2",
+        "target": "60ef8fc17540ec361fa9a3df"
+    }
+}
+
+###
+
+POST http://localhost:4003/getHabitByUserId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
+}
+
+###
+
+POST http://localhost:4003/updateHabitByObjectId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "_id": "60f77b99dbbc91e14fd2fa46",
+        "name": "tsetupdateHabit1",
+        "target": "60ef8fc17540ec361fa9a3df"
+    }
+}
+
+###
+
+POST http://localhost:4003/deleteHabitByObjectId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "_id": "60f77b99dbbc91e14fd2fa46"
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

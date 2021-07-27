@@ -23,6 +23,17 @@ if (!process.env.DBPORT) {
     throw new Error("Please specify the DBHOST for the HTTP server with the environment variable DBHOST.");
 }
 
+/*
+配列内が空か判断するコード関数にする予定
+*/
+const testArray = []
+console.log(testArray)
+if (!testArray.length) {
+    console.log("a")
+}else{
+    console.log("b")
+}
+
 
 const PORT = process.env.PORT;
 const DBHOST = process.env.DBHOST
@@ -52,98 +63,6 @@ var jwtDecription = (id) => {
 
     return id
 }
-
-
-
-// //test table select * from ... where id = 1
-// async function getTestFiltter(){
-//     const result = await Test.find({
-//         id : 17
-//     })
-
-//     console.log("以下getTestFillterの内容")
-//     console.log(result)
-
-//     return result
-// }
-
-// async function getTestFillterAndCertainProperties(){
-//     const result = await Test.find({
-//         id :14, name : {$eq: "certain properties"}})
-
-//     console.log("以下getTestFillterAndCertainPropertiesの内容");
-//     console.log(result);
-//     return result
-// }
-
-// //update test table where _id = id
-// async function updateTest(id, json){
-
-//     const update = await Test.findById(id);
-
-//     if (!update) return 400
-
-//     console.log(json.id)
-//     console.log(json.name)
-//     update.id = json.id;
-//     update.name = json.name;
-
-//     const result = await update.save();
-//     console.log("以下updateTestの内容");
-//     console.log(result);
-//     return result
-
-// }
-
-// async function deleteTest(id){
-//     const result = await Test.deleteOne({_id:id})
-//     if (!result) return 400
-//     console.log("以下deleteTestの内容")
-//     console.log(result);
-//     console.log("delete メソッド成功");
-//     return result
-// }
-
-// console.log("以下saveTest excution")
-// saveTest();
-
-// console.log("以下getTest excution")
-// getTest();
-
-// console.log("getTestFiltter excution")
-// getTestFiltter();
-
-// console.log("getTestFillterAndCertainProperties excution")
-// getTestFillterAndCertainProperties();
-
-// console.log("updateTest excution")
-// const jsonForUpdateTest = {"id": 200, "name": "updated successfully"}
-// updateTest("60e881cbe05eb136a5ba48a0", jsonForUpdateTest);//引数に id(object id = _id: 60e696f30254fe21f25dd26e) json(変更したデータの内容)
-// getTest();
-// console.log("deleteTest excution");
-// deleteTest("60e881cbe05eb136a5ba48a0");//引数にid (objectId)60e696f30254fe21f25dd26e
-// const jsonTest = {"id":33, "name": "aaaaaaaaaaaaaaaa"}
-
-// moduleFordb.saveTest(jsonTest).then(x => {
-//     console.log("以下saveの内容")
-//     console.log(x);
-//     console.log(typeof(x))
-//     const json = JSON.stringify(x)
-    
-//     console.log("一個だけ")
-//     console.log(JSON.parse(json)._id)
-// })
-
-
-// (async () => {
-//     console.log(await moduleFordb.saveTest(jsonTest))
-//   })()
-// const get = moduleFordb.getTestAll();
-// console.log("以下findの内容")
-// // (async () => {
-// //     console.log(await moduleFordb.getTestAll())
-// //   })()
-
 app.post("/test", (req, res) => {
     /*受け取るjson（テスト）
     {
@@ -160,7 +79,6 @@ app.post("/test", (req, res) => {
     console.log("id====="+id)
 
 });
-
 
 app.post("/newUserReg", (req, res) => {
     /*受け取るjson（テスト）
@@ -234,7 +152,6 @@ app.post('/login' , (req , res)=>{
 
 
 })
-
 
 app.post('/toOngoingData' , (req , res)=>{
     /*うけとるJson(test)
@@ -341,28 +258,769 @@ app.post('/updateTestByObjectId' , (req , res)=>{
         }
     }
     */
-    console.log("updateTestByObjectId!!!!!!!!!!!");
-
     const id = jwtDecription(req.body.token);
-
-    //const postData = req.body.data;
     console.log("以下受け取ったJson")
     console.log(req.body)
 
     moduleFordb.updateTest(id, req.body.data._id, req.body.data)
         .then(result => {
-            if (!result) return res.json({status:400, message:"dberror"})
+            console.log("以下updateTestByObjectIdnoの結果")
+            console.log(result)
+            res.json({
+                status: 200,
+                messaeg: "変更を適用できました！"
+            })
         }).catch(error =>{
             console.log("updateTestByObjectId 失敗");
             console.log(error);
             res.json({
                 status: 400,
-                message: "updateTestByObjectId 失敗"
+                message: "変更を適用できませんでした"
             })
         });
+});
+
+app.post('/deleteTestByObjectId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            _id : String
+        }
+    }
+    */
+    console.log("deleteTestByObjectId");
+    const id = jwtDecription(req.body.token);
+
+    console.log("以下受け取ったJson")
+    console.log(req.body)
+
+    moduleFordb.deleteTest(id, req.body.data._id).then(result => {
+        console.log("以下deleteTestの結果")
+        console.log(result);
+
+        res.json({
+            status: 200,
+            messaeg: "変更を適用できました！"
+        })
+    }).catch(error =>{
+        console.log("deleteTestByObjectId 失敗");
+        console.log(error);
+
+        res.json({
+            status: 200,
+            messaeg: "削除できませんでした！"
+        })
+    });
+
+})
+//id こっちで追加
+app.post('/saveTarget' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token: String
+        data : {
+            id はこっちで追加
+            name : String,
+            themeColor : String,
+
+            outcomes : [{
+                name : String,
+                unitName : String,
+                statisticsRule : String,
+                defaultValue : Number
+            }],
+
+            pinnedAtNavigationList : Boolean,
+            hiddenAtNavigationList : Boolean
+        }
+
+    }
+    */
+    console.log("saveTarget!!")
+    console.log("以下受けっとったJson")
+    console.log(req.body)
+    //data.id 追加忘れない！！！！！！！！！！！！！！
+    const id = jwtDecription(req.body.token);
+    req.body.data['userId'] = id
+    moduleFordb.saveTarget(req.body.data).then(result =>{
+        console.log("以下saveTargetの内容")
+        console.log(result)
+
+        res.json({
+            objectId:result._id,
+            status : 200,
+            message : "成功"
+        })
+
+    }).catch(error => {
+        res.json({
+            objectId: "",
+            status: 400,
+            message: error
+        })
+    })
 })
 
+app.post('/getTarget' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token)
+    }
+    */
+    console.log("getTargetByUserId!!!!!!!!!!!");
 
+    const id = jwtDecription(req.body.token);
+
+    moduleFordb.getTargetByUserId(id).then(result =>{
+        console.log("以下getTargetByUserIdの結果")
+        console.log(result)
+
+        res.json({
+            status: 200,
+            message: "取得成功",
+            data : result       
+        })
+    }).catch(error => {
+        console.log("getTargetByUserId")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "取得失敗",   
+        })
+    })
+
+
+})
+
+app.post('/updateTarget' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token: String
+        data : {
+            userId : Int
+            _id : String
+            name : String,
+            themeColor : String,
+
+            outcomes : [{
+                name : String,
+                unitName : String,
+                statisticsRule : String,
+                defaultValue : Number
+            }],
+
+            pinnedAtNavigationList : Boolean,
+            hiddenAtNavigationList : Boolean
+        }
+    }
+    */
+
+    const id = jwtDecription(req.body.token);
+    console.log("以下受け取ったJson")
+    console.log(req.body)
+    // amountOfOutcome = req.data.outcomes.length
+    
+
+    moduleFordb.updateTargetByObjectId(id, req.body.data)
+        .then(result => {
+            console.log("以下updateTargetの内容")
+            console.log(result)
+            res.json({
+                status: 200,
+                messaeg: "変更を適用できました！"
+            })
+        }).catch(error => {
+            console.log("updateTarget失敗")
+            console.log(error)
+
+            res.json({
+                status: 400,
+                message: "変更を適用に失敗しました"
+            })
+        })
+})
+
+app.post('/deleteTarget' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            _id : String
+        }
+    }
+    */
+   console.log("deleteTarget!!!!")
+   console.log("受け取ったJson")
+   console.log(req.body)
+
+   const id = jwtDecription(req.body.token);
+
+   moduleFordb.deleteTargetByObjectId(id, req.body.data._id)
+    .then(result => {
+        console.log("deleteTargetByObjectIdの内容")
+        console.log(result)
+        res.json({
+            status: 200,
+            message: "削除しました"
+        })
+    }).catch(error =>{
+        console.log("deleteTargetByObjectId失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "削除できませんでした"
+        })
+    })
+})
+//id こっちで追加
+app.post('/saveDocument' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            name : String,
+            uri : String,
+            targetId : String
+        }
+    }
+    */
+    console.log("saveDocument!!!")
+    console.log("受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//token 復号
+    req.body.data['userId'] = id
+
+    moduleFordb.saveDocument(req.body.data).then(result =>{
+        console.log("saveDocumentの中身")
+        console.log(result)
+        res.json({
+            status: 200,
+            message: "Document 登録しました",
+            objectId:result._id
+        })
+        
+    }).catch(error=>{
+        console.log("saveDocument失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "Document 登録失敗",
+            objectId: ""
+        })
+    })
+})
+
+app.post('/getDocumentByUserId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token)
+    }
+    */
+    console.log("getDocumentByUserId!!!!!!!!!!!");
+    const id = jwtDecription(req.body.token);//userId復号
+
+    moduleFordb.getDocumentByUserId(id).then(result => {
+        console.log("以下getDocumentByUserIdの結果")
+        console.log(result)
+        res.json({
+            status: 200,
+            message: "取得成功",
+            data : result       
+        })
+
+    }).catch(error => {
+        console.log("以下getDocumentByUserId失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "取得失敗"
+        })
+    })
+
+})
+
+app.post('/updateDocument' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            id : Int,
+            _id : String
+            name : String,
+            uri : String,
+            targetId : String
+        }
+    }
+    */
+    console.log("updateDocument!!!")
+    const id = jwtDecription(req.body.token);
+    console.log("以下受け取ったJson")
+    console.log(req.body)
+    moduleFordb.updateDocumentByObjectId(id, req.body.data).then(result => {
+        console.log("以下updateTargetの内容")
+        console.log(result)
+        res.json({
+            status: 200,
+            messaeg: "変更を適用できました！"
+        })
+    }).catch(error => {
+        console.log("updateTarget失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            messaeg: "変更を適用できませんでした"
+        })
+    })
+})
+
+app.post('/deleteDocument' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            _id : String
+        }
+    }
+    */
+    console.log("deleteDocument!!!!")
+    console.log("受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//id 復号
+    moduleFordb.deleteDocumentByObjectId(id, req.body.data._id).then(result => {
+        console.log("deleteDocumentByObjectIdの内容")
+        console.log(result)
+        res.json({
+            status: 200,
+            message: "Document削除しました"
+        })
+    }).catch(error =>{
+        console.log("deleteDocumentByObjectId失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "Document削除できませんでした"
+        })
+    })
+})
+
+app.post('/saveTerm' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            userId : Int,
+            name : String,
+            description : String,
+            targetList : [],
+            startDatetimeScheduled: Date,
+            endDatetimeScheduled: Date,
+            startDatetime: Date,
+        }
+    }
+    */
+    console.log("saveDocument!!!")
+    console.log("受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//token 復号
+    req.body.data['userId'] = id
+
+    moduleFordb.saveTerm(req.body.data).then(result => {
+        console.log("saveTermの中身")
+        console.log(result)
+        res.json({
+            objectId:result._id,
+            status: 200,
+            message: "term登録しました。"
+        })
+    }).catch(error => {
+        console.log("saveTerm登録失敗しました。")
+        console.log(error)
+        res.json({
+            objectId: "",
+            status: 400,
+            message: "saveTerm失敗しました。"
+        })
+    })
+})
+
+app.post('/getTermByUserId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token)
+    }
+    */
+    console.log("getTermByUserId!!!!!!!!!!!");
+    const id = jwtDecription(req.body.token);//userId復号
+    moduleFordb.getTermByUserId(id).then(result => {
+        console.log("以下getTermByUserIdの結果")
+        console.log(result)
+        res.json({
+            status: 200,
+            message: "成功",
+            data: result
+        })
+    }).catch(error => {
+        console.log("getTermByUserId失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "取得できませんでした。"
+        })
+    })
+})
+
+app.post('/updateTerm' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            _id: String
+            userId : Int,
+            name : String,
+            description : String,
+            targetList : [],
+            startDatetimeScheduled: Date,
+            endDatetimeScheduled: Date,
+            startDatetime: Date,
+        }
+    }
+    */
+    console.log("updateTerm!!!")
+    console.log("以下受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);
+    moduleFordb.updateTermByObjectId(id, req.body.data).then(result => {
+        console.log("以下updateTermの内容")
+        console.log(result)
+        res.json({
+            status: 200,
+            messaeg: "変更を適用できました！"
+        })
+    }).catch(error => {
+        console.log("updateTerm失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            messaeg: "変更を適用できませんでした"
+        })
+    })
+})
+
+app.post('/deleteTermByObjectId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            _id : String
+        }
+    }
+    */
+    console.log("deleteTermByObjectId!!!!")
+    console.log("受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//id 復号
+    moduleFordb.deleteTermByObjectId(id, req.body.data._id).then(result => {
+        console.log("deleteTermByObjectIdの内容")
+        console.log(result)
+        res.json({
+            status: 200,
+            message: "Term削除しました"
+        })
+    }).catch(error => {
+        console.log("deleteTermByObjectId失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "Term削除できませんでした"
+        })
+    })
+})
+
+//こっちでId追加
+app.post('/saveTodo' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            name : String,
+            startDatetimeScheduled : Date,
+            timeInfoExisted : Boolean,
+            processingTimeScheduled : Number,
+            repeatPattern : String,
+            repeatDayForWeekly : [],
+            targetList : [],
+            term : String,
+            completed : Boolean
+        }
+    }
+    */
+    console.log("saveDocument!!!")
+    console.log("受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//token 復号
+    req.body.data['userId'] = id
+    moduleFordb.saveTodo(req.body.data).then(result => {
+        console.log("saveTodoの中身")
+        console.log(result)
+        res.json({
+            objectId: result._id,
+            status: 200,
+            message: "todo登録成功"
+        })
+    }).catch(error => {
+        console.log("saveTodo失敗")
+        console.log(error)
+        res.json({
+            objectId: "",
+            status: 400,
+            message: "登録失敗しました。"
+        })
+    })
+})
+
+app.post('/getTodoByUserId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token)
+    }
+    */
+    console.log("getTodoByUserId!!!!!!!!!!!");
+    console.log("取得したJsonの中身")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//userId復号
+    moduleFordb.getTodoByUserId(id).then(result => {
+        console.log("以下getTodoByUserIdの結果")
+        console.log(result)
+        res.json({
+            status: 200,
+            message: "成功",
+            data: result
+        })
+    }).catch(error => {
+        console.log("getTodoByUserId失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "取得できませんでした。"
+        })
+    })
+})
+
+app.post('/updateTodoByObjectId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            _id: String
+            name : String,
+            startDatetimeScheduled : Date,
+            timeInfoExisted : Boolean,
+            processingTimeScheduled : Number,
+            repeatPattern : String,
+            repeatDayForWeekly : [],
+            targetList : [],
+            term : String,
+            completed : Boolean
+        }
+    }
+    */
+    console.log("updateTodo!!!")
+    console.log("以下受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);
+    moduleFordb.updateTodoByObjectId(id, req.body.data).then(result => {
+        console.log("以下updateTodoの内容")
+        console.log(result)
+        res.json({
+            status: 200,
+            messaeg: "変更を適用できました！"
+        })
+    }).catch(error => {
+        console.log("updateTodo失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            messaeg: "変更を適用できませんでした"
+        })
+    })
+})
+
+app.post('/deleteTodoByObjectId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            _id : String
+        }
+    }
+    */
+    console.log("deleteTodoyObjectId!!!!")
+    console.log("受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//id 復号
+    moduleFordb.deleteTodoByObjectId(id, req.body.data._id).then(result => {
+        console.log("deleteTodoByObjectIdの内容")
+        console.log(result)
+        res.json({
+            status: 400,
+            message: "Todo削除成功"
+        })
+    }).catch(error => {
+        console.log("deleteTodoByObjectId失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "Todo削除できませんでした"
+        })
+    })
+})
+
+//こっちでid追加
+app.post('/saveHabit' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            name : String,
+            target : String
+        }
+    }
+    */
+    console.log("saveHabit!!!")
+    console.log("受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//token 復号
+    req.body.data['userId'] = id
+    moduleFordb.saveHabit(req.body.data).then(result => {
+        console.log("saveHabitの中身")
+        console.log(result)
+        res.json({
+            objectId: result._id,
+            status: 200,
+            message: "Habit登録成功"
+        })
+    }).catch(error => {
+        console.log("saveHabit失敗")
+        console.log(error)
+        res.json({
+            objectId: "",
+            status: 400,
+            message: "登録失敗しました。"
+        })
+    })
+})
+
+app.post('/getHabitByUserId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token)
+    }
+    */
+    console.log("getTodoByUserId!!!!!!!!!!!");
+    console.log("取得したJsonの中身")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//userId復号
+    moduleFordb.getHabitByUserId(id).then(result => {
+        console.log("以下getHabitByUserIdの結果")
+        console.log(result)
+        res.json({
+            status: 200,
+            message: "成功",
+            data: result
+        })
+    }).catch(error => {
+        console.log("getHabitByUserId失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "取得できませんでした。"
+        })
+    })
+})
+
+app.post('/updateHabitByObjectId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            _id : String
+            name : String,
+            target : String
+        }
+    }
+    */
+    console.log("updateHabit!!!")
+    console.log("以下受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);
+    moduleFordb.updateHabitByObjectId(id, req.body.data).then(result => {
+        console.log("以下updateHabitの内容")
+        console.log(result)
+        res.json({
+            status: 200,
+            messaeg: "変更を適用できました！"
+        })
+    }).catch(error => {
+        console.log("updateHabit失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            messaeg: "変更を適用できませんでした"
+        })
+    })    
+})
+
+app.post('/deleteHabitByObjectId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token),
+        data : {
+            _id : String
+        }
+    }
+    */
+    console.log("deleteHabitByObjectId!!!!")
+    console.log("受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//id 復号
+    moduleFordb.deleteHabitByObjectId(id, req.body.data._id).then(result => {
+        console.log("deleteHabitByObjectIdの内容")
+        console.log(result)
+        res.json({
+            status: 400,
+            message: "Habit削除成功"
+        })
+    }).catch(error => {
+        console.log("deleteHabitByObjectId失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "Habit削除できませんでした"
+        })
+    })
+}) 
 
 /*
 予定しているrouting
@@ -381,3 +1039,4 @@ app.listen(PORT, () => {
     console.log(`FROM ONGOING-DATA: ongoing-data is listning on port` + String(PORT));
     console.log("FROM ONGOING-DATA:dbhost = "+DBHOST)
 });
+ 

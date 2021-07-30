@@ -3,13 +3,24 @@ const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
 var request = require("request");
 const moduleFordb = require('./dbmodule');
-
 const app = express();
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
 
+
+var sampleJson = {
+    a:{
+        1:[1,2,3],
+        2:[3,4,5]
+    }
+}
+console.log(sampleJson)
+Object.keys(sampleJson.a).forEach(
+    key => sampleJson.a[key].push(100) 
+)
+console.log(sampleJson)
 
 if (!process.env.PORT) {
     throw new Error("Please specify the port number for the HTTP server with the environment variable PORT.");
@@ -23,16 +34,34 @@ if (!process.env.DBPORT) {
     throw new Error("Please specify the DBHOST for the HTTP server with the environment variable DBHOST.");
 }
 
+const temp = {a:1, b:2}
+console.log("tempのKey値表示")
+console.log(Object.keys(temp))
 /*
-配列内が空か判断するコード関数にする予定
+配列の長さが０か１以上かを判定する関数
+各種ArchiveのデータをDBに登録する時すでに登録されているか新規登録か
+判定
 */
-const testArray = []
-console.log(testArray)
-if (!testArray.length) {
-    console.log("a")
-}else{
-    console.log("b")
+var checkArrayEmptyOrNot = (array) => {
+    console.log("function checkIdExistance")
+    if (!array.length) return true //要素数０の場合
+    if (array.length) return false //要素数１以上の場合
 }
+
+/*
+今まで登録したstatistics{[]}の各要素に新たな値を追加していく
+各Archiveをupdateをするための値を返す
+*/
+var appendNewDataToStatistics = (newStatistics,statistics) => {
+    console.log("appendNewDataToStatisticsの中身")
+    //resultのなかのstatisticsの中のkey値と数を確認
+    console.log(Object.keys(statistics))
+    //各satisticsのvalueに新しいjson配列newStatisticsを追加していく
+    Object.keys(statistics).forEach(
+        key => statistics[key].push(newStatistics[key])
+    )
+    return statistics
+} 
 
 
 const PORT = process.env.PORT;
@@ -45,7 +74,9 @@ const USER_LOGIN_PATH = "/login";
 
 
 console.log(`Forwarding login requests to ${LOGIN_HOST}:${LOGIN_PORT}.`);
-
+/*
+JWTを復号化
+*/
 var jwtDecription = (id) => {
     console.log("here is inside of jwtDecription function")
     console.log(id)
@@ -63,6 +94,14 @@ var jwtDecription = (id) => {
 
     return id
 }
+
+moduleFordb.checkNullTest(3, "60ecfa73a00e25a7c744dccc").then(result => {
+    console.log("checkNullTest 中身")
+    console.log(result)
+}).catch(error => {
+    console.log("checkNullTest失敗")
+    console.log(error)
+})
 app.post("/test", (req, res) => {
     /*受け取るjson（テスト）
     {
@@ -1020,21 +1059,132 @@ app.post('/deleteHabitByObjectId' , (req , res)=>{
             message: "Habit削除できませんでした"
         })
     })
-}) 
+})
 
-/*
-予定しているrouting
+//untested
+app.post('/saveTodoArchive' , (req , res)=>{
+/*  受け取るJson
+    token: String
+    data :{
+            todoId: String,
+            checkInDateTime: Date,
+            targets: [],
+            "statistics":{
+                "sampleobjectIdOfOutcome":[
+                    {
+                        "targetId": "",
+                        "name": "testsample",
+                        "unitname": "tete",
+                        "statisticsRule": "test",
+                        "defaultValue": 10,
+                        "value": 5,
+                        "feelingText": "testtext",
+                        "feelingName": "testName",
+                        "positivePercent": 10,
+                        "negativePercent": 5,
+                        "recordingDateTime": "2021-12-01T03:24:00"
+                    }
+                ],
+            }
+    }
+*/    
+    console.log("todoArchive!!!")
+    console.log("受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//token 復号
+    req.body.data['userId'] = id
+    /*
+    userId と todoIdを使用して目的のIdが存在するか確認
+    */
+    moduleFordb.getTodoArchiveByUserIdAndTodoId(id, req.body.data.todoId).then(result=>{
 
-insert to each mongo table
-get each mongo table
-update each mongo table
+        console.log("getTodoArchiveByUserIdAndTodoIdの中身")
+        console.log(result)
+        //関数getTodoArchiveByUserIdAndTodoIdの結果が[]か[要素、要素]かを判断
+        const isEmpty = checkArrayEmptyOrNot(result)
+        if (isEmpty){
+            //関数関数getTodoArchiveByUserIdAndTodoIdの結果が[]だった場合todoArchives自体をDBに新規登録
+            moduleFordb.saveTodoArchive(req.body.data).then(result => {
+                console.log("saveTodoArchiveの中身")
+                console.log(result)
+                res.json({
+                    objectId: result._id,
+                    status: 200,
+                    message: "saveTodoArchive登録成功"
+                })
+            }).catch(error => {
+                console.log("saveTodoArchive失敗")
+                console.log(error)
+                res.json({
+                    objectId: "",
+                    status: 400,
+                    message: "登録失敗しました。"
+                })
+            })
 
-#### add Archive table to registry archive###
+        }
+        //関数関数getTodoArchiveByUserIdAndTodoIdの結果が[{},{},{}]だった場合todoArchivesのkey値
+        //statisticsに値を追加してupdate
+        const statisticsToUpdate = appendNewDataToStatistics(req.body.statistics, result.statistics)
 
+        moduleFordb.updateStaisticsOfTodoArchive().then(result => {
+            console.log("updateStaisticsOfTodoArchiveの結果")
+            console.log(result)
+            res.json({
+                status: 200,
+                message: "saveTodoArchive追加成功"
+            })
+        }).catch(error => {
+            console.log("updateStaisticsOfTodoArchive失敗")
+            console.log(error)
+            res.json({
+                status: 400,
+                message: "saveTodoArchive追加失敗"
+            })
+        })
 
-*/
+    }).catch(error => {
+        console.log("getTodoArchiveByUserIdAndTodoId失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "失敗"
+        })
+    })    
+})
 
+app.post('/getTodoArchiveByUserId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token)
+    }
+    */
+    console.log("getTodoArchiveByUserId!!!!!!!!!!!");
+    console.log("取得したJsonの中身")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//userId復号
 
+    moduleFordb.getTodoArchiveByUserId(id).then(result => {
+        console.log("以下getTodoArchiveByUserIdの結果")
+        console.log(result)
+
+        //全部のget~ dataのなかが[]か{}を確認する関数つくらないとだめかも！！！！！！！！！！！！！
+        res.json({
+            status: 200,
+            message: "成功しました",
+            data: result
+        })
+    }).catch(error => {
+        console.log("getTodoArchiveByUserId失敗")
+        console.log(error)
+        res.json({
+            status: 200,
+            message: "取得失敗"
+        })
+    })
+
+})
 app.listen(PORT, () => {
     console.log(`FROM ONGOING-DATA: ongoing-data is listning on port` + String(PORT));
     console.log("FROM ONGOING-DATA:dbhost = "+DBHOST)

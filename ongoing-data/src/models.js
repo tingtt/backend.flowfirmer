@@ -11,121 +11,6 @@ mongoose.connect('mongodb://test:test@'+DBHOST+':'+DBPORT+'/test',{useNewUrlPars
 .catch(err => console.error('Something went wrong', err));
 
 
-
-//以下スキーマ設計
-
-//target内の成果リスト内のスキーマ
-//targetValue: undefined,
-// const sampleOutcomeScheme = new Schema({
-//     id: Number,
-//     user_id: Number,
-//     target_id: Number,
-//     name: String,
-//     unitName: String,
-//     statisticsRule: String,
-//     defaultValue: Number
-// });
-
-/*
-    targetスキーマ
-
-    childTargetList: undefined,
-    parentTarget: undefined
-
-*/
-// const TargetSchema = new Schema({
-//     id: Number,
-//     user_id: Number,
-//     name: String,
-//     themeColor: String,
-//     outcomeSchemes: [sampleOutcomeScheme]
-// });
-
-// /*
-//     ToDoリスト用スキーマ
-//     term: undefined
-// */
-// const ToDoSchema = new Schema({
-//     id: Number,
-//     user_id: Number,
-//     name: String,
-//     description: String,
-//     startDatetimeScheduled: Date,
-//     timeInfoExisted: Boolean,
-//     processingTimeScheduled: Number,
-//     repeatPattern: String,
-//     repeatDayForWeekly: [],
-//     targetList: [TargetSchema],
-//     completed: true
-
-// });
-
-// /*
-//     term用スキーマ
-//     term: undefined
-//     documentList: undefined
-// */
-
-// const TermSchema = new Schema({
-//     id: Number,
-//     user_id: Number,
-//     name: String,
-//     description: String,
-//     targetList: [TargetSchema],
-//     startDatetimeScheduled: Date,
-//     endDatetimeScheduled: Date,
-//     startDatetime: Date,
-//     toDoList:[ToDoSchema],
-
-// });
-
-// const Document = new Schema({
-//     id: Number,
-//     user_id: Number,
-//     name: String,
-//     url: mongoose.SchemaTypes.Url,
-//     targetList: [TargetSchema]
-// })
-
-// const sampleHabitRemind = new Schema({
-//     id: Number,
-//     user_id: Number,
-//     name: String,
-//     target: TargetSchema
-// })
-
-// const FeelingType = new Schema({
-//     id: Number,
-//     user_id: Number,
-//     name: String,
-//     defaultPositivePercent: Number,
-//     defaultNegativePercent: Number
-// },{timestamps : true})
-// const Archive = new Schema({
-//     id: Number,
-//     user_id: Number,
-//     refType: String,
-//     ref: ToDoSchema,
-//     targets: [TargetSchema],
-//     outcomes:[
-//         {
-//             Scheme: sampleOutcomeScheme,
-//             value: Number
-//         }
-//     ],
-//     text: String,
-//     feelingList:[
-//         {
-//             feeling: FeelingType,
-//             positivePercent: Number,
-//             negativePercent: Number
-//         }
-//     ],
-
-//     datetime: Date
-
-// })
-
 //各mongoコレクションのスキーマを設定する　used in ./module.js
 module.exports = class models{
     //コレクションtest 用のスキーマを返すメソッド
@@ -221,55 +106,21 @@ module.exports = class models{
     }
 
     todoArchiveModel(){
-        /*
-        {
-            _id: String,
-            userId: number,
+        
+        const todoArchiveSchema = new mongoose.Schema({
+            userId: Number,
             todoId: String,
             checkInDateTime: Date,
             targets: [],
-            statistics: [
-                [
-                    {
-                        tagetId: String,
-                        name: String,
-                        unitname: String,
-                        statisticsRule: String,
-                        defaultValue: Number,
-                        value: Number,
-                        feelingText: String,
-                        feelingName: String,
-                        positivePercent: Number,
-                        negativePercent: Number,
-                        recordingDateTime: Date
-                    },    
-                ],
-                [
-                    {
-                        tagetId: String,
-                        name: String,
-                        unitname: String,
-                        statisticsRule: String,
-                        defaultValue: Number,
-                        value: Number,
-                        feelingText: String,
-                        feelingName: String,
-                        positivePercent: Number,
-                        negativePercent: Number,
-                        recordingDateTime: Date
-                    }, 
-                ]
-            ]   
-        }
-        */
-        const todoArchiveSchema = new mongoose.Schema({
-            
+            statistics: []
         })
+        const todoArchive = mongoose.model('todoArchives', todoArchiveSchema)
+        return todoArchive
     }
 
     habitArchiveModel(){
         const habitArchiveSchema = new mongoose.Schema({
-
+            
         })
     }
 

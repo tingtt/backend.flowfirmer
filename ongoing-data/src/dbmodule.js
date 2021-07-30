@@ -7,8 +7,21 @@ const Document = model.documentModel();
 const Term = model.termModel();
 const Todo = model.todoModel();
 const Habit = model.habitModel();
+const TodoArchive = model.todoArchiveModel();
 
 //insert to Test collection
+
+/*
+こいつ削除予定
+*/
+exports.checkNullTest = async (id, objectId)=>{
+    const result = await Test.find({
+        id: id,
+        _id: objectId
+    })
+
+    return result
+}
 exports.saveTest = async (jsonForSaveTest)=>{
     const test = new Test(jsonForSaveTest)
     const result = await test.save();//
@@ -213,6 +226,54 @@ exports.deleteHabitByObjectId = async (id, objectId) => {
     return result
 }
 
+exports.saveTodoArchive = async (json) => {
+    const todoArchive = new TodoArchive(json)
+    const result = todoArchive.save();
+    return result
+}
+
+exports.getTodoArchiveByUserId = async (id) => {
+    const result = await TodoArchive.find({
+        userId: id
+    })
+    return result
+}
+
+//すでにtodoArchiveが登録されているか確認するためのモジュール
+//登録されていない場合"[]"を返す
+exports.getTodoArchiveByUserIdAndTodoId = async (id, todoId) => {
+    const result = await TodoArchive.find({
+        userId: id,
+        todoId: todoId
+    })
+    return result
+}
+
+//todoArcives のkey statisticの値をupdateするモジュール
+exports.updateStaisticsOfTodoArchive = async (id, todoId, statisticsData) => {
+    const update = await TodoArchive.updateOne({userId: id, todoId: todoId},{
+        $set: {
+            statistics: statistics
+        }
+    })
+    return update 
+}
+
+//statistics :{[]}に値を追加する
+// exports.addDataToTodoArchiveByUserIdAndTodoId = async (id, todoId, statistics)=>{
+//     const result = await TodoArchive.find({
+//         userId: id,
+//         todoId: todoId
+//     })
+//     console.log("addDataToTodoArchiveByUserIdAndTodoIdの結果 : "+result)
+//     //resultのなかのstatisticsの中のkey値と数を確認
+//     console.log(Object.keys(result.statistics))
+
+//     Object.keys(result.statistics).forEach(
+//         key => result.statistics[key] = statistics[key]
+//     )
+
+// }
 
 // exports.getTestFiltter = async ()=>{
     

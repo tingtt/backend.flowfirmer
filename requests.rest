@@ -73,6 +73,8 @@ Content-Type: application/json
     }
 }
 
+
+
 ###
 POST http://localhost:4003/saveTarget
 Content-Type: application/json
@@ -368,6 +370,51 @@ Content-Type: application/json
     }
 }
 
+###
+
+POST http://localhost:4003/saveTodoArchive
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "todoId": "",
+        "checkInDateTime": "2021-12-01T03:24:00",
+        "targets": [],
+        "statistics":{
+            "sampleobjectIdOfOutcome":[
+                {
+                    "targetId": "",
+                    "name": "testsample",
+                    "unitname": "tete",
+                    "statisticsRule": "test",
+                    "defaultValue": 10,
+                    "value": 5,
+                    "feelingText": "testtext",
+                    "feelingName": "testName",
+                    "positivePercent": 10,
+                    "negativePercent": 5,
+                    "recordingDateTime": "2021-12-01T03:24:00"
+                }
+            ],
+            "sampleobjectidOfOutCOme2":[
+                {
+                    "targetId": "",
+                    "name": "testsample",
+                    "unitname": "tete",
+                    "statisticsRule": "test",
+                    "defaultValue": 10,
+                    "value": 5,
+                    "feelingText": "testtext",
+                    "feelingName": "testName",
+                    "positivePercent": 10,
+                    "negativePercent": 5,
+                    "recordingDateTime": "2021-12-01T03:24:00"
+                }
+            ]
+        }
+    }
+}
 
 
 

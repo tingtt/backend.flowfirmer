@@ -378,11 +378,11 @@ Content-Type: application/json
 {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
     "data": {
-        "todoId": "",
+        "todoId": "6108dec3999f8d48ab580a19",
         "checkInDateTime": "2021-12-01T03:24:00",
-        "targets": [],
+        "targets": ["60ef8fc17540ec361fa9a3df"],
         "statistics":{
-            "sampleobjectIdOfOutcome":[
+            "6108de34999f8dd93b580a17":[
                 {
                     "targetId": "",
                     "name": "testsample",
@@ -397,7 +397,7 @@ Content-Type: application/json
                     "recordingDateTime": "2021-12-01T03:24:00"
                 }
             ],
-            "sampleobjectidOfOutCOme2":[
+            "6108de34999f8d839f580a18":[
                 {
                     "targetId": "",
                     "name": "testsample",
@@ -414,6 +414,15 @@ Content-Type: application/json
             ]
         }
     }
+}
+
+###
+
+POST http://localhost:4003/getTodoArchiveByUserId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
 }
 
 

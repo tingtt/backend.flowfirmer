@@ -1,3 +1,4 @@
+
 var users = [
     {
       user: "test",
@@ -14,5 +15,3 @@ var users = [
   for (var i = 0, length = users.length; i < length; ++i) {
     db.createUser(users[i]);
   }
-
-  //mongo test -u test -p test

@@ -226,12 +226,14 @@ exports.deleteHabitByObjectId = async (id, objectId) => {
     return result
 }
 
+//TodoArchive保存用のモジュール
 exports.saveTodoArchive = async (json) => {
     const todoArchive = new TodoArchive(json)
     const result = todoArchive.save();
     return result
 }
 
+//todoarchive一覧をuserIdごとに取得するモジュール
 exports.getTodoArchiveByUserId = async (id) => {
     const result = await TodoArchive.find({
         userId: id
@@ -253,28 +255,8 @@ exports.getTodoArchiveByUserIdAndTodoId = async (id, todoId) => {
 exports.updateStaisticsOfTodoArchive = async (id, todoId, statisticsData) => {
     const update = await TodoArchive.updateOne({userId: id, todoId: todoId},{
         $set: {
-            statistics: statistics
+            statistics: statisticsData
         }
     })
-    return update 
+    return update
 }
-
-//statistics :{[]}に値を追加する
-// exports.addDataToTodoArchiveByUserIdAndTodoId = async (id, todoId, statistics)=>{
-//     const result = await TodoArchive.find({
-//         userId: id,
-//         todoId: todoId
-//     })
-//     console.log("addDataToTodoArchiveByUserIdAndTodoIdの結果 : "+result)
-//     //resultのなかのstatisticsの中のkey値と数を確認
-//     console.log(Object.keys(result.statistics))
-
-//     Object.keys(result.statistics).forEach(
-//         key => result.statistics[key] = statistics[key]
-//     )
-
-// }
-
-// exports.getTestFiltter = async ()=>{
-    
-// }

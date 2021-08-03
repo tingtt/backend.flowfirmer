@@ -52,14 +52,20 @@ var checkArrayEmptyOrNot = (array) => {
 今まで登録したstatistics{[]}の各要素に新たな値を追加していく
 各Archiveをupdateをするための値を返す
 */
-var appendNewDataToStatistics = (newStatistics,statistics) => {
+var appendNewDataToStatistics = (newStatistics, statistics) => {
     console.log("appendNewDataToStatisticsの中身")
     //resultのなかのstatisticsの中のkey値と数を確認
-    console.log(Object.keys(statistics))
+    console.log("追加したいstatisticsの内容")
+    console.log(newStatistics)
+    console.log("追加先のstatisticsの内容")
+    console.log(statistics)
+    //console.log(Object.keys(statistics))
     //各satisticsのvalueに新しいjson配列newStatisticsを追加していく
     Object.keys(statistics).forEach(
-        key => statistics[key].push(newStatistics[key])
+        key => statistics[key].push(newStatistics[key][0])
     )
+    console.log("newStatistics追加されたあとのでーた")
+    console.log(statistics)
     return statistics
 } 
 
@@ -95,13 +101,13 @@ var jwtDecription = (id) => {
     return id
 }
 
-moduleFordb.checkNullTest(3, "60ecfa73a00e25a7c744dccc").then(result => {
-    console.log("checkNullTest 中身")
-    console.log(result)
-}).catch(error => {
-    console.log("checkNullTest失敗")
-    console.log(error)
-})
+// moduleFordb.checkNullTest(3, "60ecfa73a00e25a7c744dccc").then(result => {
+//     console.log("checkNullTest 中身")
+//     console.log(result)
+// }).catch(error => {
+//     console.log("checkNullTest失敗")
+//     console.log(error)
+// })
 app.post("/test", (req, res) => {
     /*受け取るjson（テスト）
     {
@@ -1122,26 +1128,34 @@ app.post('/saveTodoArchive' , (req , res)=>{
                 })
             })
 
-        }
-        //関数関数getTodoArchiveByUserIdAndTodoIdの結果が[{},{},{}]だった場合todoArchivesのkey値
-        //statisticsに値を追加してupdate
-        const statisticsToUpdate = appendNewDataToStatistics(req.body.statistics, result.statistics)
+        }else{
+             //関数関数getTodoArchiveByUserIdAndTodoIdの結果が[{},{},{}]だった場合todoArchivesのkey値
+            //statisticsに値を追加してupdate
+            console.log("以下else文")
+            console.log(result.length)
+            console.log("以下result[0]")
+            console.log(result[0])
+            console.log("以下result[0].statisticsの中身")
+            console.log(result[0].statistics)
+            const statisticsToUpdate = appendNewDataToStatistics(req.body.data.statistics, result[0].statistics)
 
-        moduleFordb.updateStaisticsOfTodoArchive().then(result => {
-            console.log("updateStaisticsOfTodoArchiveの結果")
-            console.log(result)
-            res.json({
-                status: 200,
-                message: "saveTodoArchive追加成功"
+            moduleFordb.updateStaisticsOfTodoArchive(id, req.body.data.todoId, statisticsToUpdate).then(result => {
+                console.log("updateStaisticsOfTodoArchiveの結果")
+                console.log(result)
+                res.json({
+                    status: 200,
+                    message: "saveTodoArchive追加成功"
+                })
+            }).catch(error => {
+                console.log("updateStaisticsOfTodoArchive失敗")
+                console.log(error)
+                res.json({
+                    status: 400,
+                    message: "saveTodoArchive追加失敗"
+                })
             })
-        }).catch(error => {
-            console.log("updateStaisticsOfTodoArchive失敗")
-            console.log(error)
-            res.json({
-                status: 400,
-                message: "saveTodoArchive追加失敗"
-            })
-        })
+
+        }
 
     }).catch(error => {
         console.log("getTodoArchiveByUserIdAndTodoId失敗")
@@ -1183,6 +1197,12 @@ app.post('/getTodoArchiveByUserId' , (req , res)=>{
             message: "取得失敗"
         })
     })
+
+})
+
+app.post('/' , (req , res)=>{
+
+   res.send('hello from simple server :)')
 
 })
 app.listen(PORT, () => {

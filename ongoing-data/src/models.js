@@ -112,7 +112,7 @@ module.exports = class models{
             todoId: String,
             checkInDateTime: Date,
             targets: [],
-            statistics: []
+            statistics: {}
         })
         const todoArchive = mongoose.model('todoArchives', todoArchiveSchema)
         return todoArchive

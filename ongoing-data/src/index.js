@@ -9,19 +9,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-
-var sampleJson = {
-    a:{
-        1:[1,2,3],
-        2:[3,4,5]
-    }
-}
-console.log(sampleJson)
-Object.keys(sampleJson.a).forEach(
-    key => sampleJson.a[key].push(100) 
-)
-console.log(sampleJson)
-
 if (!process.env.PORT) {
     throw new Error("Please specify the port number for the HTTP server with the environment variable PORT.");
 }
@@ -34,9 +21,6 @@ if (!process.env.DBPORT) {
     throw new Error("Please specify the DBHOST for the HTTP server with the environment variable DBHOST.");
 }
 
-const temp = {a:1, b:2}
-console.log("tempのKey値表示")
-console.log(Object.keys(temp))
 /*
 配列の長さが０か１以上かを判定する関数
 各種ArchiveのデータをDBに登録する時すでに登録されているか新規登録か
@@ -1054,7 +1038,7 @@ app.post('/deleteHabitByObjectId' , (req , res)=>{
         console.log("deleteHabitByObjectIdの内容")
         console.log(result)
         res.json({
-            status: 400,
+            status: 200,
             message: "Habit削除成功"
         })
     }).catch(error => {
@@ -1067,7 +1051,7 @@ app.post('/deleteHabitByObjectId' , (req , res)=>{
     })
 })
 
-//untested
+//tested
 app.post('/saveTodoArchive' , (req , res)=>{
 /*  受け取るJson
     token: String
@@ -1167,6 +1151,7 @@ app.post('/saveTodoArchive' , (req , res)=>{
     })    
 })
 
+//tested
 app.post('/getTodoArchiveByUserId' , (req , res)=>{
     /*
     受け取るJson
@@ -1200,10 +1185,39 @@ app.post('/getTodoArchiveByUserId' , (req , res)=>{
 
 })
 
-app.post('/' , (req , res)=>{
+//untested
+app.post('/deleteTodoArchiveByObjectId' , (req , res)=>{
+    /*受け取るJson
+    {
+        token:String,
+        data: {
+            _id:String
+        }
+    }
+    */
+    console.log("deleteTodoArchiveByObjectId!!!!")
+    console.log("受け取ったJson")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);//id encrypt
+    moduleFordb.deleteTodoArchiveByObjectId(id, req.body.data._id).then(result => {
+        console.log("deleteHabitByObjectIdの内容")
+        console.log(result)
+        res.json({
+            status: 200,
+            message: "TodoArchive削除成功"
+        })
+    }).catch(error => {
+        console.log("deleteTodoArchiveByObjectId失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "Habit削除できませんでした"
+        })
+    })    
+})
 
-   res.send('hello from simple server :)')
 
+app.post('/saveHabitArchive' , (req , res)=>{
 })
 app.listen(PORT, () => {
     console.log(`FROM ONGOING-DATA: ongoing-data is listning on port` + String(PORT));

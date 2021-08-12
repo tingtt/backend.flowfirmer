@@ -425,6 +425,23 @@ Content-Type: application/json
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
 }
 
+###
+
+
+POST http://localhost:4003/deleteTodoArchiveByObjectId
+Content-Type: application/json
+
+{
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "_id": "6108df94999f8d60ec580a1a"
+    }
+}
+
+###
+
+
+
 
 
 

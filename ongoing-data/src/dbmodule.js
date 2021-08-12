@@ -22,6 +22,8 @@ exports.checkNullTest = async (id, objectId)=>{
 
     return result
 }
+
+
 exports.saveTest = async (jsonForSaveTest)=>{
     const test = new Test(jsonForSaveTest)
     const result = await test.save();//
@@ -259,4 +261,13 @@ exports.updateStaisticsOfTodoArchive = async (id, todoId, statisticsData) => {
         }
     })
     return update
+}
+
+//TodoArchiveを_idごとに削除
+exports.deleteTodoArchiveByObjectId = async (id, objectId) => {
+    const result = await TodoArchive.deleteOne({
+        _id: objectId,
+        userId: id
+    })
+    return result
 }

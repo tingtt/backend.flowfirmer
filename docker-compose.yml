@@ -80,3 +80,24 @@ services:
     restart: "no"
     depends_on:
       - mongo
+
+  nginx:
+    image: nginx
+    depends_on:
+      - flask
+      - ongoing-data
+      - next
+    ports:
+      - "80:80"
+    volumes:
+      - ./proxy/default.conf:/etc/nginx/conf.d/default.conf
+      - ./proxy/log:/var/log/nginx
+
+  next:
+    image: node:latest
+    working_dir: /next
+    volumes:
+      - "./next:/next"
+    ports:
+      - "3000:3000"
+    command: npm run dev

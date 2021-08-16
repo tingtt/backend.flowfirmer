@@ -1,0 +1,3 @@
+[submodule "next"]
+	path = next
+	url = ssh://git@gitlab-repo.iroha-s.jp:27110/techlid/front-end.git

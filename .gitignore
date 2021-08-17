@@ -2,3 +2,4 @@ db/mysql_data/*
 login/__pycache__/*
 mongo/db/*
 ongoing-data/node_modules/*
+proxy/log/*

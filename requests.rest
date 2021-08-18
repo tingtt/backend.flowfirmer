@@ -24,8 +24,8 @@ POST http://localhost:4003/login
 Content-Type: application/json
 
 {
-    "email": "api_gateway@example.com",
-    "password": "api-gateway"
+    "email": "nodejs.example.com",
+    "password": "Kan272420"
 }
 
 ###

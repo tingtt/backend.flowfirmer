@@ -7,7 +7,7 @@ import time
 import datetime
 import hashlib#ハッシュ化用
 import jwt
-from sqlalchemy import exc
+from sqlalchemy import exc, func
 
 
 from setting import session# セッション変数の取得
@@ -90,52 +90,61 @@ def login():
     '''
     start = time.time()
     user_info = json.loads(request.get_data().decode())
+    try:
 
-    user = User()#User テーブルレコード参照開始
+        user = User()#User テーブルレコード参照開始
+        # mail_existance = session.query(func.count(User.mail)).\
+        #     filter(User.mail == user_info['email'])
+        # print("メールアドレスの個数：", mail_existance, "type:", type(mail_existance))
 
-    auth_pass = session.query(User.password).\
-        filter(User.mail == user_info['email']).\
-            one()
-    
-    print(auth_pass[0]+"　は　"+str(user_info['email'])+"　のパスワード！！")
-
-    #パスワードをハッシュ化して比較
-    if hashlib.sha256(user_info['password'].encode()).hexdigest() == auth_pass[0]:
-
-
-        id = session.query(User.id).\
+        auth_pass = session.query(User.password).\
             filter(User.mail == user_info['email']).\
                 one()
         
-        print("変数idの中身は：", id)
-        print("変数idの中身は：", id[0])
-        #print("変数idの中身は：", len(id))
-        jwt_payload={}
+        print(auth_pass[0]+"　は　"+str(user_info['email'])+"　のパスワード！！")
 
-        jwt_payload['id'] = id[0]
+        #パスワードをハッシュ化して比較
+        if hashlib.sha256(user_info['password'].encode()).hexdigest() == auth_pass[0]:
 
-        key = "secret_key_goes_here"
-        encoded = jwt.encode(jwt_payload, key, algorithm="HS256")
-        print(encoded)
+
+            id = session.query(User.id).\
+                filter(User.mail == user_info['email']).\
+                    one()
+            
+            print("変数idの中身は：", id)
+            print("変数idの中身は：", id[0])
+            #print("変数idの中身は：", len(id))
+            jwt_payload={}
+
+            jwt_payload['id'] = id[0]
+
+            key = "secret_key_goes_here"
+            encoded = jwt.encode(jwt_payload, key, algorithm="HS256")
+            print(encoded)
+            session.close()
+            elapsed_time = time.time() - start
+
+
+
+            session.close()
+
+            return jsonify({
+                        "status": 200,
+                        "token": encoded,
+                        "elapsedTime": elapsed_time
+                    })
+        
         session.close()
-        elapsed_time = time.time() - start
-
-
-
-        session.close()
-
+        
         return jsonify({
-                    "status": 200,
-                    "token": encoded,
-                    "elapsedTime": elapsed_time
+                "status": 400,
+                "message": "failed to login"
                 })
-    
-    session.close()
-    
-    return jsonify({
+    except:
+        return jsonify({
             "status": 400,
-            "message": "failed to login"
-            })
+            "message": "正しいメールアドレスまたはパスワードを入力してください"
+        })
 
 
 if __name__ == "__main__":

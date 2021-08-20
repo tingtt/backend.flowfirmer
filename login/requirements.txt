@@ -3,3 +3,4 @@ PyMySQL
 sqlalchemy
 requests
 pyjwt
+flask_cors

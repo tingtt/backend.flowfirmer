@@ -8,20 +8,24 @@ import datetime
 import hashlib#ハッシュ化用
 import jwt
 from sqlalchemy import exc, func
+from flask_cors import CORS, cross_origin
 
 
 from setting import session# セッション変数の取得
 from user import *# Userモデルの取得
 
 app = Flask(__name__)
+CORS(app, support_credentials=True)
 app.config['JSON_AS_ASCII'] = False
 
 
 @app.route("/", methods=['GET'])
+@cross_origin(supports_credentials=True)
 def index():
     return jsonify({"name": "Kantaro", "stand":"The World"})
 
 @app.route("/new_user_reg", methods=["POST"])
+@cross_origin(supports_credentials=True)
 def new_user_reg():
     '''
     受け取るJSON : user_info[]
@@ -80,6 +84,7 @@ def new_user_reg():
 
 
 @app.route("/login", methods=["POST"])
+@cross_origin(supports_credentials=True)
 def login():
     '''
     受け取るjson: user_info[]

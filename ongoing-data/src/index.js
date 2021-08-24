@@ -142,6 +142,8 @@ app.post("/newUserReg", (req, res) => {
         if (error) return console.log("API-GATEWAY:newUserReg post return error")
         temp = JSON.stringify(response.body)
         console.log("API-GATEWAY:newUserReg 返ってきた値="+String(temp))
+        // Set-Cookieヘッダーにtokenをセットする処理
+        res.cookie("token", response.body.token, {httpOnly: true})//お試し
         res.json(response.body)
     });
 });
@@ -178,6 +180,8 @@ app.post('/login' , (req , res)=>{
 
         temp = JSON.stringify(response.body)
         console.log("API-GATEWAY:login 返ってきた値="+String(temp))
+        // Set-Cookieヘッダーにtokenをセットする処理
+        res.cookie("token", response.body.token, {httpOnly: true})//お試し
         res.json(response.body)
     });
 

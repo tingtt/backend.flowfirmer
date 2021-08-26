@@ -43,7 +43,12 @@ module.exports = class models{
                 defaultValue : Number
             }],
             pinnedAtNavigationList : Boolean,
-            hiddenAtNavigationList : Boolean
+            hiddenAtNavigationList : Boolean,
+            themeColor: {
+                r: Number,
+                g: Number,
+                b: Number
+            }
 
         });
         const target = mongoose.model('targets', targetSchema)
@@ -89,7 +94,8 @@ module.exports = class models{
             repeatDayForWeekly : [],
             targetList : [],
             term : String,
-            completed : Boolean
+            completed : Boolean,
+            archived: Boolean
         })
         const todo = mongoose.model('todos', todoSchema)
         return todo

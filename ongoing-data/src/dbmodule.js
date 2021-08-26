@@ -79,7 +79,8 @@ exports.updateTargetByObjectId = async (id, json)=>{
             themeColor: json.themeColor,
             outcomes: json.outcomes,
             pinnedAtNavigationList: json.pinnedAtNavigationList,
-            hiddenAtNavigationList: json.hiddenAtNavigationList
+            hiddenAtNavigationList: json.hiddenAtNavigationList,
+            themeColor: json.themeColor
         }
     });
     return update
@@ -183,7 +184,8 @@ exports.updateTodoByObjectId = async (id, json) => {
             repeatDayForWeekly: json.repeatDayForWeekly,
             targetList: json.targetList,
             term: json.term,
-            completed: json.completed
+            completed: json.completed,
+            archived: json.archived
         }
     })
     return update

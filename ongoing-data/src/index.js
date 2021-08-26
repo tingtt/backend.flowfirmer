@@ -142,8 +142,8 @@ app.post("/newUserReg", (req, res) => {
         if (error) return console.log("API-GATEWAY:newUserReg post return error")
         temp = JSON.stringify(response.body)
         console.log("API-GATEWAY:newUserReg 返ってきた値="+String(temp))
-        // // Set-Cookieヘッダーにtokenをセットする処理
-        // res.cookie("token", response.body.token, {httpOnly: true})//お試し
+        // Set-Cookieヘッダーにtokenをセットする処理
+        res.cookie("token", response.body.token, {httpOnly: true})//お試し
         res.json(response.body)
     });
 });
@@ -180,33 +180,33 @@ app.post('/login' , (req , res)=>{
 
         temp = JSON.stringify(response.body)
         console.log("API-GATEWAY:login 返ってきた値="+String(temp))
-        // // Set-Cookieヘッダーにtokenをセットする処理
-        // res.cookie("token", response.body.token, {httpOnly: true})//お試し
+        // Set-Cookieヘッダーにtokenをセットする処理
+        res.cookie("token", response.body.token, {httpOnly: true})//お試し
         res.json(response.body)
     });
 
 
 })
 
-app.post('/toOngoingData' , (req , res)=>{
-    /*うけとるJson(test)
-    {
-        "token": String
-    }
-    */
+// app.post('/toOngoingData' , (req , res)=>{
+//     /*うけとるJson(test)
+//     {
+//         "token": String
+//     }
+//     */
 
-    console.log("toOngoingData strating!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    //console.log(req.body.message)
-    const postData = req.body;
-    const postDataStr = JSON.stringify(postData);
-    console.log("postDataStr="+postDataStr)
-    const id = jwtDecription(req.body.token)
-    console.log(id)
+//     console.log("toOngoingData strating!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+//     //console.log(req.body.message)
+//     const postData = req.body;
+//     const postDataStr = JSON.stringify(postData);
+//     console.log("postDataStr="+postDataStr)
+//     const id = jwtDecription(req.body.token)
+//     console.log(id)
 
 
-   res.send('hello from simple server :)')
+//    res.send('hello from simple server :)')
 
-})
+// })
 
 app.post('/saveTest' , (req , res)=>{
     /*
@@ -377,8 +377,13 @@ app.post('/saveTarget' , (req , res)=>{
     console.log("saveTarget!!")
     console.log("以下受けっとったJson")
     console.log(req.body)
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
     //data.id 追加忘れない！！！！！！！！！！！！！！
-    const id = jwtDecription(req.body.token);
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+
     req.body.data['userId'] = id
     moduleFordb.saveTarget(req.body.data).then(result =>{
         console.log("以下saveTargetの内容")
@@ -408,7 +413,11 @@ app.post('/getTarget' , (req , res)=>{
     */
     console.log("getTargetByUserId!!!!!!!!!!!");
 
-    const id = jwtDecription(req.body.token);
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //data.id 追加忘れない！！！！！！！！！！！！！！
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
 
     moduleFordb.getTargetByUserId(id).then(result =>{
         console.log("以下getTargetByUserIdの結果")
@@ -455,11 +464,13 @@ app.post('/updateTarget' , (req , res)=>{
     }
     */
 
-    const id = jwtDecription(req.body.token);
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+
     console.log("以下受け取ったJson")
     console.log(req.body)
-    // amountOfOutcome = req.data.outcomes.length
-    
 
     moduleFordb.updateTargetByObjectId(id, req.body.data)
         .then(result => {
@@ -494,7 +505,10 @@ app.post('/deleteTarget' , (req , res)=>{
    console.log("受け取ったJson")
    console.log(req.body)
 
-   const id = jwtDecription(req.body.token);
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
 
    moduleFordb.deleteTargetByObjectId(id, req.body.data._id)
     .then(result => {
@@ -529,7 +543,12 @@ app.post('/saveDocument' , (req , res)=>{
     console.log("saveDocument!!!")
     console.log("受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//token 復号
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+
     req.body.data['userId'] = id
 
     moduleFordb.saveDocument(req.body.data).then(result =>{
@@ -560,7 +579,11 @@ app.post('/getDocumentByUserId' , (req , res)=>{
     }
     */
     console.log("getDocumentByUserId!!!!!!!!!!!");
-    const id = jwtDecription(req.body.token);//userId復号
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
 
     moduleFordb.getDocumentByUserId(id).then(result => {
         console.log("以下getDocumentByUserIdの結果")
@@ -597,7 +620,12 @@ app.post('/updateDocument' , (req , res)=>{
     }
     */
     console.log("updateDocument!!!")
-    const id = jwtDecription(req.body.token);
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+
     console.log("以下受け取ったJson")
     console.log(req.body)
     moduleFordb.updateDocumentByObjectId(id, req.body.data).then(result => {
@@ -630,7 +658,12 @@ app.post('/deleteDocument' , (req , res)=>{
     console.log("deleteDocument!!!!")
     console.log("受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//id 復号
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+
     moduleFordb.deleteDocumentByObjectId(id, req.body.data._id).then(result => {
         console.log("deleteDocumentByObjectIdの内容")
         console.log(result)
@@ -667,7 +700,12 @@ app.post('/saveTerm' , (req , res)=>{
     console.log("saveDocument!!!")
     console.log("受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//token 復号
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+
     req.body.data['userId'] = id
 
     moduleFordb.saveTerm(req.body.data).then(result => {
@@ -697,7 +735,12 @@ app.post('/getTermByUserId' , (req , res)=>{
     }
     */
     console.log("getTermByUserId!!!!!!!!!!!");
-    const id = jwtDecription(req.body.token);//userId復号
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+
     moduleFordb.getTermByUserId(id).then(result => {
         console.log("以下getTermByUserIdの結果")
         console.log(result)
@@ -736,7 +779,12 @@ app.post('/updateTerm' , (req , res)=>{
     console.log("updateTerm!!!")
     console.log("以下受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+
     moduleFordb.updateTermByObjectId(id, req.body.data).then(result => {
         console.log("以下updateTermの内容")
         console.log(result)
@@ -767,7 +815,12 @@ app.post('/deleteTermByObjectId' , (req , res)=>{
     console.log("deleteTermByObjectId!!!!")
     console.log("受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//id 復号
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+
     moduleFordb.deleteTermByObjectId(id, req.body.data._id).then(result => {
         console.log("deleteTermByObjectIdの内容")
         console.log(result)
@@ -807,7 +860,12 @@ app.post('/saveTodo' , (req , res)=>{
     console.log("saveDocument!!!")
     console.log("受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//token 復号
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+
     req.body.data['userId'] = id
     moduleFordb.saveTodo(req.body.data).then(result => {
         console.log("saveTodoの中身")
@@ -838,7 +896,12 @@ app.post('/getTodoByUserId' , (req , res)=>{
     console.log("getTodoByUserId!!!!!!!!!!!");
     console.log("取得したJsonの中身")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//userId復号
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+    
     moduleFordb.getTodoByUserId(id).then(result => {
         console.log("以下getTodoByUserIdの結果")
         console.log(result)
@@ -879,7 +942,12 @@ app.post('/updateTodoByObjectId' , (req , res)=>{
     console.log("updateTodo!!!")
     console.log("以下受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);
+
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+
     moduleFordb.updateTodoByObjectId(id, req.body.data).then(result => {
         console.log("以下updateTodoの内容")
         console.log(result)
@@ -910,7 +978,12 @@ app.post('/deleteTodoByObjectId' , (req , res)=>{
     console.log("deleteTodoyObjectId!!!!")
     console.log("受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//id 復号
+    
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+    
     moduleFordb.deleteTodoByObjectId(id, req.body.data._id).then(result => {
         console.log("deleteTodoByObjectIdの内容")
         console.log(result)
@@ -943,7 +1016,12 @@ app.post('/saveHabit' , (req , res)=>{
     console.log("saveHabit!!!")
     console.log("受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//token 復号
+    
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+    
     req.body.data['userId'] = id
     moduleFordb.saveHabit(req.body.data).then(result => {
         console.log("saveHabitの中身")
@@ -974,7 +1052,12 @@ app.post('/getHabitByUserId' , (req , res)=>{
     console.log("getTodoByUserId!!!!!!!!!!!");
     console.log("取得したJsonの中身")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//userId復号
+    
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+    
     moduleFordb.getHabitByUserId(id).then(result => {
         console.log("以下getHabitByUserIdの結果")
         console.log(result)
@@ -1008,7 +1091,12 @@ app.post('/updateHabitByObjectId' , (req , res)=>{
     console.log("updateHabit!!!")
     console.log("以下受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);
+    
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+    
     moduleFordb.updateHabitByObjectId(id, req.body.data).then(result => {
         console.log("以下updateHabitの内容")
         console.log(result)
@@ -1039,7 +1127,12 @@ app.post('/deleteHabitByObjectId' , (req , res)=>{
     console.log("deleteHabitByObjectId!!!!")
     console.log("受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//id 復号
+    
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+    
     moduleFordb.deleteHabitByObjectId(id, req.body.data._id).then(result => {
         console.log("deleteHabitByObjectIdの内容")
         console.log(result)
@@ -1087,7 +1180,12 @@ app.post('/saveTodoArchive' , (req , res)=>{
     console.log("todoArchive!!!")
     console.log("受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//token 復号
+    
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+    
     req.body.data['userId'] = id
     /*
     userId と todoIdを使用して目的のIdが存在するか確認
@@ -1168,7 +1266,12 @@ app.post('/getTodoArchiveByUserId' , (req , res)=>{
     console.log("getTodoArchiveByUserId!!!!!!!!!!!");
     console.log("取得したJsonの中身")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//userId復号
+    
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+    
 
     moduleFordb.getTodoArchiveByUserId(id).then(result => {
         console.log("以下getTodoArchiveByUserIdの結果")
@@ -1204,7 +1307,12 @@ app.post('/deleteTodoArchiveByObjectId' , (req , res)=>{
     console.log("deleteTodoArchiveByObjectId!!!!")
     console.log("受け取ったJson")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);//id encrypt
+    
+    console.log("cookie の中身")
+    console.log(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
+    
     moduleFordb.deleteTodoArchiveByObjectId(id, req.body.data._id).then(result => {
         console.log("deleteHabitByObjectIdの内容")
         console.log(result)

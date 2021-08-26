@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken')
 var request = require("request");
 const moduleFordb = require('./dbmodule');
 const app = express();
+const cookieParser = require('cookie-parser');
+
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -901,7 +904,7 @@ app.post('/getTodoByUserId' , (req , res)=>{
     console.log(req.cookies.token)
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
-    
+
     moduleFordb.getTodoByUserId(id).then(result => {
         console.log("以下getTodoByUserIdの結果")
         console.log(result)

@@ -76,7 +76,6 @@ exports.updateTargetByObjectId = async (id, json)=>{
     const update = await Target.updateOne({_id: json._id,userId: id},{
         $set: {
             name: json.name,
-            themeColor: json.themeColor,
             outcomes: json.outcomes,
             pinnedAtNavigationList: json.pinnedAtNavigationList,
             hiddenAtNavigationList: json.hiddenAtNavigationList,

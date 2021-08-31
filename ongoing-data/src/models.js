@@ -35,7 +35,6 @@ module.exports = class models{
         const targetSchema = new mongoose.Schema({
             userId : Number,
             name : String,
-            themeColor : String,
             outcomes : [{
                 name : String,
                 unitName : String,

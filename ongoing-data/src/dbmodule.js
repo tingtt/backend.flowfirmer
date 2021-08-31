@@ -185,7 +185,8 @@ exports.updateTodoByObjectId = async (id, json) => {
             targetList: json.targetList,
             term: json.term,
             completed: json.completed,
-            archived: json.archived
+            archived: json.archived,
+            description: json.description
         }
     })
     return update

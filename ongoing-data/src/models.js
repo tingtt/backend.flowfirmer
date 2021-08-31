@@ -95,7 +95,8 @@ module.exports = class models{
             targetList : [],
             term : String,
             completed : Boolean,
-            archived: Boolean
+            archived: Boolean,
+            description: String
         })
         const todo = mongoose.model('todos', todoSchema)
         return todo

@@ -85,6 +85,14 @@ exports.updateTargetByObjectId = async (id, json)=>{
     return update
 }
 
+exports.updateOnlyOutcomesInTargetByObjectId = async (id, json)=>{
+    const update = await Target.updateOne({_id: json._id, userId: id},{
+        $set: {
+            outcomes: json.outcomes
+        }
+    })
+}
+
 exports.deleteTargetByObjectId = async (id, objectId)=> {
     const result= await Target.deleteOne({
         _id: objectId,

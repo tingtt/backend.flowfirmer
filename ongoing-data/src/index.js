@@ -447,7 +447,7 @@ app.post('/updateTarget' , (req , res)=>{
     /*
     受け取るJson
     {
-        token: String
+        outcomesOnly: Boolean
         data : {
             userId : Int
             _id : String
@@ -475,6 +475,27 @@ app.post('/updateTarget' , (req , res)=>{
     console.log("以下受け取ったJson")
     console.log(req.body)
 
+    //outcomesだけをupdateしたいときの処理
+    if (req.body.outcomesOnly){
+        moduleFordb.updateOnlyOutcomesInTargetByObjectId(id, req.body.data)
+            .then(result => {
+                console.log("以下updateTargetの内容")
+                console.log(result)
+                res.json({
+                    status: 200,
+                    messaeg: "変更を適用できました！"
+                })
+            }).catch(error => {
+                console.log("updateTargetOnlyOutcomes失敗")
+                console.log(error)
+                res.json({
+                    status: 400,
+                    message: "変更を適用に失敗しました"
+                })
+            })
+    }
+
+    //全部updateするときの処理
     moduleFordb.updateTargetByObjectId(id, req.body.data)
         .then(result => {
             console.log("以下updateTargetの内容")

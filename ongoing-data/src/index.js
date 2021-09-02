@@ -37,6 +37,35 @@ var checkArrayEmptyOrNot = (array) => {
     if (array.length) return false //要素数１以上の場合
 }
 
+var groupByOutcomeId = (data) => {
+    console.log("function groupByOutcomeId")
+    var outcomeIdArray = []
+    var returnJson = {}
+    var count = 0
+    data.forEach(
+        element => {
+            if(!count){
+                //一回り目だけ無条件で登録済みoucomeIdをoutcomeIdArrayにPush
+                outcomeIdArray.push(element['outcomeId'])
+                //returnJsonに　"outcomeId":[]を追加
+                returnJson[element['outcomeId']] = []
+            }
+
+            if (!outcomeIdArray.includes(element['outcomeId'])){
+                //outcomeIdArrayにoucomeIdが登録されていないときoucomeIdをoutcomeIdArrayにPush
+                outcomeIdArray.push(element['outcomeId'])
+                //returnJsonに　"outcomeId":[]を追加
+                returnJson[element['outcomeId']] = []
+            }
+            //returnjson{"outcomeId": [],}にelement を追加する
+            returnJson[element["outcomeId"]].push(element)
+
+            count++
+        }
+    )
+    return returnJson
+}
+
 /*
 今まで登録したstatistics{[]}の各要素に新たな値を追加していく
 各Archiveをupdateをするための値を返す
@@ -89,6 +118,8 @@ var jwtDecription = (id) => {
 
     return id
 }
+
+
 
 // moduleFordb.checkNullTest(3, "60ecfa73a00e25a7c744dccc").then(result => {
 //     console.log("checkNullTest 中身")
@@ -1318,6 +1349,155 @@ app.post('/getTodoArchiveByUserId' , (req , res)=>{
 
 })
 
+//cookie未対応
+app.post('/saveArchive' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token)
+        data: {
+            userId: String,
+            todoId: String,
+            checkInDateTime: Date
+            feelingAndDiary: {
+                diaryFlag: Boolean // ここ追加！！！！
+                feelingFlag: Boolean
+                textForDiary: String
+                positiveValue: Int,
+                negativeValue: Int
+            },
+            outcomes: [
+                {
+                    outcomeId: String
+                    value : int
+                },
+                {
+                    outcomeId: String
+                    value : int
+                }
+            ]
+
+        }
+    }
+    */
+    console.log("saveArchive!!!!!!!!!!!");
+    console.log("取得したJsonの中身")
+    console.log(req.body)
+    //res.send("aaaaaaaaaaaaaaaaa")
+    
+    // console.log("cookie の中身")
+    // console.log(req.cookies.token)
+    const id = jwtDecription(req.body.token);
+    
+    // const id = jwtDecription(req.cookies.token)
+
+    /*
+    reftype にTodoと書き込み
+    refIdにTodoId書き込み
+    */
+    var outcomes = req.body.data.outcomes
+    //req.body.data.outcomesの中の要素数だけoutcomeArchiveにデータを登録
+    outcomes.forEach(
+        element => {
+            element['userId'] = id
+            element['todoId'] = req.body.data.todoId
+            element['checkInDateTime'] = req.body.data.checkInDateTime
+
+            moduleFordb.saveOutcomeArchive(element).then(result => {
+                console.log("以下のoutcomeデータを登録しました")
+                console.log(result)
+            }).catch(error => {
+                console.log("outcomeデータ登録失敗")
+                console.log(error)
+                res.json({
+                    status: 400,
+                    message: "outcome登録失敗"
+                })
+            })
+        }
+    )
+    
+    var feelingAndDiary = req.body.data.feelingAndDiary
+    feelingAndDiary['userId'] = id
+    feelingAndDiary['refType'] = "todo"
+    feelingAndDiary['refId'] = req.body.data.todoId
+    feelingAndDiary['checkInDateTime'] = req.body.data.checkInDateTime
+    moduleFordb.saveFeelingAndDiaryArchive(feelingAndDiary).then(result => {
+        console.log("saveFeelingAndDiaryArchive保存成功")
+        console.log(result)
+        res.json({
+            status: 200,
+            message: "登録成功"
+        })
+    }).catch(error => {
+        console.log("saveFeelingAndDiaryArchive失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            meassage: "FeelingAndDiaryArchive登録失敗"
+        })
+    })
+})
+
+//cookie未対応
+app.post('/getOutcomeArchiveByUserId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token)
+    }
+    */
+    console.log("getOutcomeArchivesByUserId!!!!!!!!!!!");
+    console.log("取得したJsonの中身")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);
+    moduleFordb.getOutcomeArchive(id).then(result => {
+        console.log("以下getOutcomeArchiveの中身")
+        console.log(result)
+        const temp = groupByOutcomeId(result);
+        res.json({
+            status: 200,
+            data: temp
+        })
+    }).catch(error => {
+        console.log("getOutcomeArchive失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "取得失敗"
+        })
+    })
+})
+
+//cookie未対応
+app.post('/getFeelingAndDiaryArchivesByUserId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token)
+    }
+    */
+    console.log("getFeelingAndDiaryArchivesByUserId!!!!!!!!!!!");
+    console.log("取得したJsonの中身")
+    console.log(req.body)
+    const id = jwtDecription(req.body.token);
+    moduleFordb.getFeelingAndDiaryArchive(id).then(result => {
+        console.log("以下getFeelingAndDiaryArchiveの中身")
+        console.log(result)
+        res.json({
+            status: 200,
+            data: result
+        })
+    }).catch(error =>{
+        console.log("getFeelingAndDiaryArchive失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "取得失敗"
+        })
+    })
+})
+
 //untested
 app.post('/deleteTodoArchiveByObjectId' , (req , res)=>{
     /*受け取るJson
@@ -1354,11 +1534,61 @@ app.post('/deleteTodoArchiveByObjectId' , (req , res)=>{
     })    
 })
 
-
-app.post('/saveHabitArchive' , (req , res)=>{
-})
 app.listen(PORT, () => {
     console.log(`FROM ONGOING-DATA: ongoing-data is listning on port` + String(PORT));
     console.log("FROM ONGOING-DATA:dbhost = "+DBHOST)
 });
  
+/*endpoint saveArchives に投げるJson
+{
+    userId: String,
+    todoId: String,
+    date: Date
+    feeling: {
+        refType: String
+        refId: String
+        text: String
+        value: Int
+    },
+    outcomes: [
+        {
+            outcomeId: String
+            value : int
+        },
+        {
+            outcomeId: String
+            value : int
+        }
+    ]
+}
+*/
+
+/*outcomearchive mongo tableの構成
+{   
+    userId: String,
+    todoId: String,
+    outcomeId: String,
+    value: Int,
+    date: Date
+}
+*/
+
+/*feelingArchive mongo tableの構成
+{
+    userId: String,
+    refType: String,
+    refId: String,
+    textForDiary: String,
+    positive: Int,
+    negative: Int,
+    checkInDateTime: Date
+    diaryFlag: Boolean
+    feelingFlag: boolean //ここ！！！！！！！！
+}
+*/
+
+/*diary mongo tableの構成
+{
+
+}
+*/

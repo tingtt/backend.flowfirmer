@@ -39,7 +39,8 @@ module.exports = class models{
                 name : String,
                 unitName : String,
                 statisticsRule : String,
-                defaultValue : Number
+                defaultValue : Number,
+                targetValue: Number
             }],
             pinnedAtNavigationList : Boolean,
             hiddenAtNavigationList : Boolean,
@@ -123,17 +124,41 @@ module.exports = class models{
         const todoArchive = mongoose.model('todoArchives', todoArchiveSchema)
         return todoArchive
     }
+    /*
 
-    habitArchiveModel(){
-        const habitArchiveSchema = new mongoose.Schema({
-            
+    */
+
+    //ダッシュボードで表示する統計データ（成果、outcome）用のスキーマ
+    outcomeArchiveModel(){
+        const outcomeArchiveSchema = new mongoose.Schema({
+            userId: Number,
+            todoId: String,
+            outcomeId: String,
+            value: Number,
+            checkInDateTime: Date,
+            name : String,
+            unitName : String,
+            statisticsRule : String
         })
+        const outcomeArchive = mongoose.model('outcomeArchives', outcomeArchiveSchema)
+        return outcomeArchive
     }
 
-    diaryArchiveModel(){
-        const diaryArchiveSchema = new mongoose.Schema({
-
+    feelingAndDiaryArchiveModel(){
+        const feelingAndDiaryArchiveSchema = new mongoose.Schema({
+            userId: Number,
+            refType: String,
+            refId: String,
+            textForDiary: String,
+            positiveValue: Number,
+            negativeValue: Number,
+            checkInDateTime: Date,
+            diaryFlag: Boolean,
+            feelingFlag: Boolean
         })
+
+        const feelingAndDiaryArchive = mongoose.model('feelingAndDiaryArchives', feelingAndDiaryArchiveSchema)
+        return feelingAndDiaryArchive
     }
 }
 

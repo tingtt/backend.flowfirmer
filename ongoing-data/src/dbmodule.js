@@ -8,6 +8,8 @@ const Term = model.termModel();
 const Todo = model.todoModel();
 const Habit = model.habitModel();
 const TodoArchive = model.todoArchiveModel();
+const OutcomeArchive = model.outcomeArchiveModel();
+const FeelingAndDiaryArchive = model.feelingAndDiaryArchiveModel();
 
 //insert to Test collection
 
@@ -281,3 +283,39 @@ exports.deleteTodoArchiveByObjectId = async (id, objectId) => {
     })
     return result
 }
+
+//oucomeArchive にデータを保存
+exports.saveOutcomeArchive = async (json) => {
+    const outcomeArchive = new OutcomeArchive(json)
+    const result = outcomeArchive.save();
+    return result
+}
+//feelingArchive にデータを保存
+exports.saveFeelingAndDiaryArchive = async (json) => {
+    const feelingAndDiaryArchive = new FeelingAndDiaryArchive(json)
+    const result = feelingAndDiaryArchive.save();
+    return result
+}
+
+//test 用　outcomeArchive取得
+exports.getOutcomeArchive = async (id) => {
+    const result = await OutcomeArchive.find({
+        userId: id
+    })
+    return result
+}
+////test 用　feelingArchive取得
+exports.getFeelingAndDiaryArchive = async (id) => {
+    const result = await FeelingAndDiaryArchive.find({
+        userId: id
+    })
+    return result
+}
+
+exports.getOutcomeArchiveByCroup = async (id) => {
+    const result = await OutcomeArchive.aggregate.group({
+        _id: $outcomeId
+    })
+    return result
+}
+

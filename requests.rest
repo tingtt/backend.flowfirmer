@@ -440,6 +440,59 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:4003/saveArchive
+Content-Type: application/json
+
+{
+    "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data":{
+        "todoId":"1",
+        "checkInDateTime":"2021-12-01T03:24:00",
+        "feelingAndDiary":{
+            "diaryFlag":true,
+            "feelingFlag":true,
+            "textForDiary":"testの日記です",
+            "positiveValue":4,
+            "negativeValue":2
+        },
+        "outcomes":[
+            {
+                "outcomeId":"1",
+                "value":10,
+                "name" : "腹筋",
+                "unitName" : "回",
+                "statisticsRule ": ""
+            },
+            {
+                "outcomeId":"2",
+                "value":10,
+                "name" : "udetate",
+                "unitName" : "回",
+                "statisticsRule ": ""
+            }
+        ]
+    }
+}
+
+###
+
+
+POST http://localhost:4003/getOutcomeArchiveByUserId
+Content-Type: application/json
+
+{
+    "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
+}
+
+###
+
+POST http://localhost:4003/getFeelingAndDiaryArchivesByUserId
+Content-Type: application/json
+
+{
+    "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
+}
+
 
 
 

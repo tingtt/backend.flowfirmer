@@ -156,7 +156,9 @@ exports.updateTermByObjectId = async (id, json) => {
             startDatetimeScheduled: json.startDatetimeScheduled,
             endDatetimeScheduled: json.endDatetimeScheduled,
             startDatetime: json.startDatetime,
-            targetList: json.targetList       }
+            targetList: json.targetList,
+            endDatetime: json.endDatetime       
+        }
     })
     return update
 }
@@ -195,7 +197,8 @@ exports.updateTodoByObjectId = async (id, json) => {
             term: json.term,
             completed: json.completed,
             archived: json.archived,
-            description: json.description
+            description: json.description,
+            repeatDateForMonthly: json.repeatDateForMonthly
         }
     })
     return update

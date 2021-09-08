@@ -77,7 +77,8 @@ module.exports = class models{
             targetList : [],
             startDatetimeScheduled: Date,
             endDatetimeScheduled: Date,
-            startDatetime: Date
+            startDatetime: Date,
+            endDatetime: Date
         })
         const term = mongoose.model('terms', termSchema)
         return term
@@ -96,7 +97,8 @@ module.exports = class models{
             term : String,
             completed : Boolean,
             archived: Boolean,
-            description: String
+            description: String,
+            repeatDateForMonthly: Number
         })
         const todo = mongoose.model('todos', todoSchema)
         return todo

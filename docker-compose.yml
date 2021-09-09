@@ -5,7 +5,7 @@ services:
       context: ./login
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - "5000"
     volumes:
       - "./login:/projects"
     tty: true
@@ -32,7 +32,7 @@ services:
   db:
     image: mysql:5.7
     ports:
-      - "3306:3306"
+      - "3306"
     volumes:
       # 初期データを投入するSQLが格納されているdir
       - ./db/mysql_init:/docker-entrypoint-initdb.d
@@ -52,7 +52,7 @@ services:
     container_name: mongo
     restart: always
     ports:
-      - "27018:27017"
+      - "27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: ecc
@@ -70,7 +70,7 @@ services:
       dockerfile: Dockerfile
     container_name: ongoing-data
     ports:
-      - "4003:4003"
+      - "4003"
     environment:
       - DBHOST=mongo
       - DBPORT=27017
@@ -99,7 +99,7 @@ services:
     volumes:
       - "./next:/next"
     ports:
-      - "3000:3000"
+      - "3000"
     command: >
       sh -c "
       npm install && npm run dev

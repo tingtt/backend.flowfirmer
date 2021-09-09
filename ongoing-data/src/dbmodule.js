@@ -74,6 +74,13 @@ exports.getTargetByUserId = async (id)=>{
     return result
 }
 
+exports.getTargetByOutcomeId = async (id) => {
+    const result = await Target.findOne({
+        'outcomes._id': id
+    });
+    return result;
+};
+
 exports.updateTargetByObjectId = async (id, json)=>{
     const update = await Target.updateOne({_id: json._id,userId: id},{
         $set: {

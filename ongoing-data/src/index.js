@@ -50,33 +50,74 @@ if (isUndefined(token)){
     console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 }
 
+/**
+ *
+ * @param OutcomeArchive[] data
+ * @returns res: [
+        {
+            targetId: String,
+            outcomeId: String,
+            title: String,
+            unitName: String,
+            totalFlg: Boolean,
+            data: [
+                { time: Date, amount: String },
+                ...
+            ],
+            dataTotal: [
+                { time: Date, amount: String },
+                ...
+            ]
+        },
+        ...
+    ]
+ */
 var groupByOutcomeId = (data) => {
     console.log("function groupByOutcomeId")
-    var outcomeIdArray = []
-    var returnJson = {}
-    var count = 0
-    data.forEach(
-        element => {
-            if(!count){
-                //一回り目だけ無条件で登録済みoucomeIdをoutcomeIdArrayにPush
-                outcomeIdArray.push(element['outcomeId'])
-                //returnJsonに　"outcomeId":[]を追加
-                returnJson[element['outcomeId']] = []
-            }
+    var res = [];
+    // Calc for `res.dataTotal.amount`
+    var totalAmount = 0;
 
-            if (!outcomeIdArray.includes(element['outcomeId'])){
-                //outcomeIdArrayにoucomeIdが登録されていないときoucomeIdをoutcomeIdArrayにPush
-                outcomeIdArray.push(element['outcomeId'])
-                //returnJsonに　"outcomeId":[]を追加
-                returnJson[element['outcomeId']] = []
-            }
-            //returnjson{"outcomeId": [],}にelement を追加する
-            returnJson[element["outcomeId"]].push(element)
-
-            count++
+    data.forEach(element => {
+        // Find index in object with outcomeId.
+        var idx = res.length == 0 ? -1 : res.findIndex(value => value.outcomeId == element.outcomeId)
+        // Same OutcomeScheme's data not exist.
+        if (idx == -1) {
+            // Get info. (Target, OutcomeScheme)
+            var targetId = "";
+            var unitName = "";
+            var totalFlg = false;
+            await moduleFordb.getTargetByOutcomeId(element.outcomeId).then((res) => {
+                targetId = res._id;
+                const outcome = res.outcomes.find(outcome => outcome._id == element.outcomeId);
+                unitName = outcome.unitName;
+                totalFlg = outcome.totalFlg == 'Sum'
+            });
+            // Push object and get index.
+            idx = res.push({
+                targetId: element.outcomeId,
+                outcomeId: element.outcomeId,
+                title: element.outcomeId,
+                unitName: unitName,
+                totalFlg: totalFlg,
+                data: [],
+                dataTotal: []
+            }) - 1;
         }
-    )
-    return returnJson
+        // normal graph data.
+        res[idx].data.push({
+            time: element.checkInDateTime,
+            amount: element.value
+        });
+        // total graph data.
+        totalAmount += element.value;
+        res[idx].dataTotal.push({
+            time: element.checkInDateTime,
+            amount: totalAmount
+        });
+    });
+
+    return res;
 }
 
 /*
@@ -1545,7 +1586,8 @@ app.post('/saveArchive' , (req , res)=>{
         token : String(token)
         data: {
             userId: String,
-            todoId: String,
+            refType: String,
+            refId: String,
             checkInDateTime: Date
             feelingAndDiary: {
                 diaryFlag: Boolean // ここ追加！！！！
@@ -1596,7 +1638,8 @@ app.post('/saveArchive' , (req , res)=>{
     outcomes.forEach(
         element => {
             element['userId'] = id
-            element['todoId'] = req.body.data.todoId
+            element['refType'] = req.body.data.refType
+            element['refId'] = req.body.data.refId
             element['checkInDateTime'] = req.body.data.checkInDateTime
 
             moduleFordb.saveOutcomeArchive(element).then(result => {
@@ -1615,8 +1658,8 @@ app.post('/saveArchive' , (req , res)=>{
     
     var feelingAndDiary = req.body.data.feelingAndDiary
     feelingAndDiary['userId'] = id
-    feelingAndDiary['refType'] = "todo"
-    feelingAndDiary['refId'] = req.body.data.todoId
+    feelingAndDiary['refType'] = req.body.data.refType
+    feelingAndDiary['refId'] = req.body.data.refId
     feelingAndDiary['checkInDateTime'] = req.body.data.checkInDateTime
     moduleFordb.saveFeelingAndDiaryArchive(feelingAndDiary).then(result => {
         console.log("saveFeelingAndDiaryArchive保存成功")

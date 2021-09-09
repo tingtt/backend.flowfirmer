@@ -1766,8 +1766,8 @@ app.post('/tokenCheck' , (req , res)=>{
 
     }else if(id) {
         res.json({
-            status: 400,
-            message: "token undefind"
+            status: 200,
+            message: "token verified"
         })
         return
     }

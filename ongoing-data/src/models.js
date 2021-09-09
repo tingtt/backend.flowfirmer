@@ -139,9 +139,6 @@ module.exports = class models{
             outcomeId: String,
             value: Number,
             checkInDateTime: Date,
-            name : String,
-            unitName : String,
-            statisticsRule : String
         })
         const outcomeArchive = mongoose.model('outcomeArchives', outcomeArchiveSchema)
         return outcomeArchive

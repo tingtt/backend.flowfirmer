@@ -1,4 +1,4 @@
-POST http://localhost:4003/newUserReg
+POST http://localhost/api/newUserReg
 content-type: application/json
 
 {
@@ -9,7 +9,7 @@ content-type: application/json
 
 ###
 
-POST http://localhost:4003/newUserReg
+POST http://localhost/api/newUserReg
 content-type: application/json
 
  {
@@ -20,7 +20,7 @@ content-type: application/json
 
 ###
 
-POST http://localhost:4003/login
+POST http://localhost/api/login
 Content-Type: application/json
 
 {
@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:4003/saveTest
+POST http://localhost/api/saveTest
 Content-Type: application/json
 
 {
@@ -41,7 +41,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:4003/getTestbyId
+POST http://localhost/api/getTestbyId
 Content-Type: application/json
 
 {
@@ -50,7 +50,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:4003/updateTestByObjectId
+POST http://localhost/api/updateTestByObjectId
 Content-Type: application/json
 
 {
@@ -63,7 +63,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:4003/deleteTestByObjectId
+POST http://localhost/api/deleteTestByObjectId
 Content-Type: application/json
 
 {
@@ -76,7 +76,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:4003/saveTarget
+POST http://localhost/api/saveTarget
 Content-Type: application/json
 
 {
@@ -105,7 +105,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:4003/getTarget
+POST http://localhost/api/getTarget
 Content-Type: application/json
 
 {
@@ -114,7 +114,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/updateTarget
+POST http://localhost/api/updateTarget
 Content-Type: application/json
 
 {
@@ -144,7 +144,7 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:4003/deleteTarget
+POST http://localhost/api/deleteTarget
 Content-Type: application/json
 
 {
@@ -156,7 +156,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/saveDocument
+POST http://localhost/api/saveDocument
 Content-Type: application/json
 
 {
@@ -169,7 +169,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:4003/getDocumentByUserId
+POST http://localhost/api/getDocumentByUserId
 Content-Type: application/json
 
 {
@@ -178,7 +178,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/updateDocument
+POST http://localhost/api/updateDocument
 Content-Type: application/json
 
 {
@@ -193,7 +193,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/deleteDocument
+POST http://localhost/api/deleteDocument
 Content-Type: application/json
 
 {
@@ -206,7 +206,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/saveTerm
+POST http://localhost/api/saveTerm
 Content-Type: application/json
 
 {
@@ -223,7 +223,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/getTermByUserId
+POST http://localhost/api/getTermByUserId
 Content-Type: application/json
 
 {
@@ -232,7 +232,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/updateTerm
+POST http://localhost/api/updateTerm
 Content-Type: application/json
 
 {
@@ -250,7 +250,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/deleteTermByObjectId
+POST http://localhost/api/deleteTermByObjectId
 Content-Type: application/json
 
 {
@@ -262,7 +262,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/saveTodo
+POST http://localhost/api/saveTodo
 Content-Type: application/json
 
 {
@@ -282,7 +282,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/getTodoByUserId
+POST http://localhost/api/getTodoByUserId
 Content-Type: application/json
 
 {
@@ -291,7 +291,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/updateTodoByObjectId
+POST http://localhost/api/updateTodoByObjectId
 Content-Type: application/json
 
 {
@@ -312,7 +312,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/deleteTodoByObjectId
+POST http://localhost/api/deleteTodoByObjectId
 Content-Type: application/json
 
 {
@@ -324,7 +324,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/saveHabit
+POST http://localhost/api/saveHabit
 Content-Type: application/json
 
 {
@@ -337,7 +337,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/getHabitByUserId
+POST http://localhost/api/getHabitByUserId
 Content-Type: application/json
 
 {
@@ -346,7 +346,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/updateHabitByObjectId
+POST http://localhost/api/updateHabitByObjectId
 Content-Type: application/json
 
 {
@@ -360,7 +360,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/deleteHabitByObjectId
+POST http://localhost/api/deleteHabitByObjectId
 Content-Type: application/json
 
 {
@@ -372,7 +372,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/saveTodoArchive
+POST http://localhost/api/saveTodoArchive
 Content-Type: application/json
 
 {
@@ -418,7 +418,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/getTodoArchiveByUserId
+POST http://localhost/api/getTodoArchiveByUserId
 Content-Type: application/json
 
 {
@@ -428,7 +428,7 @@ Content-Type: application/json
 ###
 
 
-POST http://localhost:4003/deleteTodoArchiveByObjectId
+POST http://localhost/api/deleteTodoArchiveByObjectId
 Content-Type: application/json
 
 {
@@ -440,7 +440,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/saveArchive
+POST http://localhost/api/saveArchive
 Content-Type: application/json
 
 {
@@ -477,7 +477,7 @@ Content-Type: application/json
 ###
 
 
-POST http://localhost:4003/getOutcomeArchiveByUserId
+POST http://localhost/api/getOutcomeArchiveByUserId
 Content-Type: application/json
 
 {
@@ -486,7 +486,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:4003/getFeelingAndDiaryArchivesByUserId
+POST http://localhost/api/getFeelingAndDiaryArchivesByUserId
 Content-Type: application/json
 
 {

@@ -134,7 +134,8 @@ module.exports = class models{
     outcomeArchiveModel(){
         const outcomeArchiveSchema = new mongoose.Schema({
             userId: Number,
-            todoId: String,
+            refType: String,
+            refId: String,
             outcomeId: String,
             value: Number,
             checkInDateTime: Date,

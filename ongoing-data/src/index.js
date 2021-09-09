@@ -1545,7 +1545,8 @@ app.post('/saveArchive' , (req , res)=>{
         token : String(token)
         data: {
             userId: String,
-            todoId: String,
+            refType: String,
+            refId: String,
             checkInDateTime: Date
             feelingAndDiary: {
                 diaryFlag: Boolean // ここ追加！！！！
@@ -1596,7 +1597,8 @@ app.post('/saveArchive' , (req , res)=>{
     outcomes.forEach(
         element => {
             element['userId'] = id
-            element['todoId'] = req.body.data.todoId
+            element['refType'] = req.body.data.refType
+            element['refId'] = req.body.data.refId
             element['checkInDateTime'] = req.body.data.checkInDateTime
 
             moduleFordb.saveOutcomeArchive(element).then(result => {
@@ -1615,8 +1617,8 @@ app.post('/saveArchive' , (req , res)=>{
     
     var feelingAndDiary = req.body.data.feelingAndDiary
     feelingAndDiary['userId'] = id
-    feelingAndDiary['refType'] = "todo"
-    feelingAndDiary['refId'] = req.body.data.todoId
+    feelingAndDiary['refType'] = req.body.data.refType
+    feelingAndDiary['refId'] = req.body.data.refId
     feelingAndDiary['checkInDateTime'] = req.body.data.checkInDateTime
     moduleFordb.saveFeelingAndDiaryArchive(feelingAndDiary).then(result => {
         console.log("saveFeelingAndDiaryArchive保存成功")

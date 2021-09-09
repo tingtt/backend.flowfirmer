@@ -37,19 +37,6 @@ var checkArrayEmptyOrNot = (array) => {
     if (array.length) return false //要素数１以上の場合
 }
 
-var isUndefined = (v) => {
-    if (v === undefined) {
-        return true
-    }
-    return false 
-}
-
-const token = undefined
-
-if (isUndefined(token)){
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-}
-
 /**
  *
  * @param OutcomeArchive[] data
@@ -231,7 +218,7 @@ app.post("/newUserReg", (req, res) => {
         temp = JSON.stringify(response.body)
         console.log("API-GATEWAY:newUserReg 返ってきた値="+String(temp))
         // Set-Cookieヘッダーにtokenをセットする処理
-        res.cookie("token", response.body.token, {httpOnly: true})//お試し
+        res.cookie("token", response.body.token)//お試し{httpOnly:true}削除
         res.json(response.body)
     });
 });
@@ -269,32 +256,12 @@ app.post('/login' , (req , res)=>{
         temp = JSON.stringify(response.body)
         console.log("API-GATEWAY:login 返ってきた値="+String(temp))
         // Set-Cookieヘッダーにtokenをセットする処理
-        res.cookie("token", response.body.token, {httpOnly: true})//お試し
+        res.cookie("token", response.body.token)//お試し{httpOnly:true}削除
         res.json(response.body)
     });
 
 
 })
-
-// app.post('/toOngoingData' , (req , res)=>{
-//     /*うけとるJson(test)
-//     {
-//         "token": String
-//     }
-//     */
-
-//     console.log("toOngoingData strating!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-//     //console.log(req.body.message)
-//     const postData = req.body;
-//     const postDataStr = JSON.stringify(postData);
-//     console.log("postDataStr="+postDataStr)
-//     const id = jwtDecription(req.body.token)
-//     console.log(id)
-
-
-//    res.send('hello from simple server :)')
-
-// })
 
 app.post('/saveTest' , (req , res)=>{
     /*
@@ -473,12 +440,13 @@ app.post('/saveTarget' , (req , res)=>{
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
 
-    //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+   //tokenがundefinedだったらエラーを返す
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     req.body.data['userId'] = id
@@ -514,12 +482,13 @@ app.post('/getTarget' , (req , res)=>{
     //data.id 追加忘れない！！！！！！！！！！！！！！
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
-    //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+   //tokenがundefinedだったらエラーを返す
+   if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     moduleFordb.getTargetByUserId(id).then(result =>{
@@ -570,12 +539,12 @@ app.post('/updateTarget' , (req , res)=>{
     console.log(req.cookies.token)
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
-    //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     console.log("以下受け取ったJson")
@@ -638,12 +607,12 @@ app.post('/deleteTarget' , (req , res)=>{
     console.log(req.cookies.token)
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
-    //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
    moduleFordb.deleteTargetByObjectId(id, req.body.data._id)
@@ -683,12 +652,12 @@ app.post('/saveDocument' , (req , res)=>{
     console.log(req.cookies.token)
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
-    //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     req.body.data['userId'] = id
@@ -726,11 +695,12 @@ app.post('/getDocumentByUserId' , (req , res)=>{
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     moduleFordb.getDocumentByUserId(id).then(result => {
@@ -772,12 +742,12 @@ app.post('/updateDocument' , (req , res)=>{
     console.log(req.cookies.token)
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
-    //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     console.log("以下受け取ったJson")
@@ -816,12 +786,12 @@ app.post('/deleteDocument' , (req , res)=>{
     console.log(req.cookies.token)
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
-    //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     moduleFordb.deleteDocumentByObjectId(id, req.body.data._id).then(result => {
@@ -864,12 +834,12 @@ app.post('/saveTerm' , (req , res)=>{
     console.log(req.cookies.token)
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
-    //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     req.body.data['userId'] = id
@@ -905,12 +875,12 @@ app.post('/getTermByUserId' , (req , res)=>{
     console.log(req.cookies.token)
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
-    //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     moduleFordb.getTermByUserId(id).then(result => {
@@ -955,12 +925,12 @@ app.post('/updateTerm' , (req , res)=>{
     console.log(req.cookies.token)
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
-    //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     moduleFordb.updateTermByObjectId(id, req.body.data).then(result => {
@@ -997,12 +967,13 @@ app.post('/deleteTermByObjectId' , (req , res)=>{
     console.log(req.cookies.token)
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
-    //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     moduleFordb.deleteTermByObjectId(id, req.body.data._id).then(result => {
@@ -1049,11 +1020,12 @@ app.post('/saveTodo' , (req , res)=>{
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     req.body.data['userId'] = id
@@ -1091,11 +1063,12 @@ app.post('/getTodoByUserId' , (req , res)=>{
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     moduleFordb.getTodoByUserId(id).then(result => {
@@ -1143,11 +1116,12 @@ app.post('/updateTodoByObjectId' , (req , res)=>{
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     moduleFordb.updateTodoByObjectId(id, req.body.data).then(result => {
@@ -1185,11 +1159,12 @@ app.post('/deleteTodoByObjectId' , (req , res)=>{
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
     
     moduleFordb.deleteTodoByObjectId(id, req.body.data._id).then(result => {
@@ -1229,11 +1204,12 @@ app.post('/saveHabit' , (req , res)=>{
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
     
     req.body.data['userId'] = id
@@ -1271,11 +1247,12 @@ app.post('/getHabitByUserId' , (req , res)=>{
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
     
     moduleFordb.getHabitByUserId(id).then(result => {
@@ -1316,11 +1293,12 @@ app.post('/updateHabitByObjectId' , (req , res)=>{
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
     
     moduleFordb.updateHabitByObjectId(id, req.body.data).then(result => {
@@ -1358,11 +1336,12 @@ app.post('/deleteHabitByObjectId' , (req , res)=>{
     //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
     
     moduleFordb.deleteHabitByObjectId(id, req.body.data._id).then(result => {
@@ -1414,11 +1393,12 @@ app.post('/saveTodoArchive' , (req , res)=>{
     console.log(req.body)
 
     //tokenがundefinedだったらエラーを返す
-   if (isUndefined(req.cookies.token)){
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
     
     console.log("cookie の中身")
@@ -1508,11 +1488,12 @@ app.post('/getTodoArchiveByUserId' , (req , res)=>{
     console.log(req.body)
 
     //tokenがundefinedだったらエラーを返す
-   if (isUndefined(req.cookies.token)){
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
     
     console.log("cookie の中身")
@@ -1589,15 +1570,16 @@ app.post('/saveArchive' , (req , res)=>{
     
     // console.log("cookie の中身")
     // console.log(req.cookies.token)
-    const id = jwtDecription(req.body.token);
-    // const id = jwtDecription(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
 
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     /*
@@ -1660,14 +1642,16 @@ app.post('/getOutcomeArchiveByUserId' , (req , res)=>{
     console.log("getOutcomeArchivesByUserId!!!!!!!!!!!");
     console.log("取得したJsonの中身")
     console.log(req.body)
-    const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token);
+
 
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
 
     moduleFordb.getOutcomeArchive(id).then(result => {
@@ -1701,16 +1685,16 @@ app.post('/getFeelingAndDiaryArchivesByUserId' , (req , res)=>{
     console.log(req.body)
 
 
-    const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token);
 
     //tokenがundefinedだったらエラーを返す
-    if (isUndefined(id)) {
+    if (!id) {
         res.json({
             status: 400,
             message: "token undefind"
         })
+        return
     }
-
     moduleFordb.getFeelingAndDiaryArchive(id).then(result => {
         console.log("以下getFeelingAndDiaryArchiveの中身")
         console.log(result)
@@ -1765,17 +1749,28 @@ app.post('/deleteTodoArchiveByObjectId' , (req , res)=>{
 })
 
 app.post('/tokenCheck' , (req , res)=>{
-    //受け取るJson
+    //受け取るcookie
     /*
-
+    token: token.token.token
     */
-    console.log("tokenCheck!!!")
-    console.log("受け取ったJson")
-    console.log(req.body)  
     console.log("cookie の中身")
     console.log(req.cookies.token)
-    //const id = jwtDecription(req.body.token);
     const id = jwtDecription(req.cookies.token)
+
+    if (!id) {
+        res.json({
+            status: 400,
+            message: "token undefind"
+        })
+        return
+
+    }else if(id) {
+        res.json({
+            status: 400,
+            message: "token undefind"
+        })
+        return
+    }
 })
 
 app.listen(PORT, () => {

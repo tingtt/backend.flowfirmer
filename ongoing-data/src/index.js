@@ -1800,10 +1800,19 @@ app.post('/tokenCheck' , (req , res)=>{
     //受け取るcookie
     /*
     token: token.token.token
+    bodyFlag: Boolean
     */
     console.log("cookie の中身")
     console.log(req.cookies.token)
-    const id = jwtDecription(req.cookies.token)
+    console.log(req.body.token)
+    console.log(req.body.bodyFlag)
+    var id = 0
+
+    if (!req.body.bodyFlag){
+        id = jwtDecription(req.cookies.token)
+    }
+
+    id = jwtDecription(req.body.token)
 
     if (!id) {
         res.json({

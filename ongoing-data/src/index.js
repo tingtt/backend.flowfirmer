@@ -74,22 +74,36 @@ var groupByOutcomeId = (data) => {
             var targetId = "";
             var unitName = "";
             var totalFlg = false;
-            await moduleFordb.getTargetByOutcomeId(element.outcomeId).then((res) => {
+            moduleFordb.getTargetByOutcomeId(element.outcomeId).then((res) => {
                 targetId = res._id;
                 const outcome = res.outcomes.find(outcome => outcome._id == element.outcomeId);
                 unitName = outcome.unitName;
                 totalFlg = outcome.totalFlg == 'Sum'
+
+                // Push object and get index.
+                idx = res.push({
+                    targetId: element.outcomeId,
+                    outcomeId: element.outcomeId,
+                    title: element.outcomeId,
+                    unitName: unitName,
+                    totalFlg: totalFlg,
+                    data: [],
+                    dataTotal: []
+                }) - 1;
+
+                // normal graph data.
+                res[idx].data.push({
+                    time: element.checkInDateTime,
+                    amount: element.value
+                });
+                // total graph data.
+                totalAmount += element.value;
+                res[idx].dataTotal.push({
+                    time: element.checkInDateTime,
+                    amount: totalAmount
+                });
             });
-            // Push object and get index.
-            idx = res.push({
-                targetId: element.outcomeId,
-                outcomeId: element.outcomeId,
-                title: element.outcomeId,
-                unitName: unitName,
-                totalFlg: totalFlg,
-                data: [],
-                dataTotal: []
-            }) - 1;
+            return;
         }
         // normal graph data.
         res[idx].data.push({

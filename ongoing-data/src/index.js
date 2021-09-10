@@ -1712,6 +1712,32 @@ app.post('/getFeelingAndDiaryArchivesByUserId' , (req , res)=>{
     })
 })
 
+app.post('/getFeelingArchiveByUserId' , (req , res)=>{
+    /*
+    受け取るJson
+    {
+        token : String(token)
+    }
+    */
+    console.log("getFeelingAndDiaryArchivesByUserId!!!!!!!!!!!");
+    console.log("取得したJsonの中身")
+    console.log(req.body)
+
+
+    const id = jwtDecription(req.body.token);
+
+    //tokenがundefinedだったらエラーを返す
+    if (!id) {
+        res.json({
+            status: 400,
+            message: "token undefind"
+        })
+        return
+    }
+
+    
+})
+
 //untested
 app.post('/deleteTodoArchiveByObjectId' , (req , res)=>{
     /*受け取るJson

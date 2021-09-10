@@ -329,3 +329,10 @@ exports.getOutcomeArchiveByCroup = async (id) => {
     return result
 }
 
+exports.getFeelingArchive = async (id) => {
+    const result = await FeelingAndDiaryArchive.find({
+        userId: id
+    },'positiveValue negativeValue checkInDateTime').sort({checkInDateTime: 'asce'})
+    return result
+}
+

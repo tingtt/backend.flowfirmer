@@ -1584,8 +1584,9 @@ app.post('/saveArchive' , (req , res)=>{
     
     // console.log("cookie の中身")
     // console.log(req.cookies.token)
-    //const id = jwtDecription(req.body.token);
-    const id = jwtDecription(req.cookies.token)
+
+    const id = jwtDecription(req.body.token);
+    //const id = jwtDecription(req.cookies.token)
 
     //tokenがundefinedだったらエラーを返す
     if (!id) {
@@ -1699,8 +1700,8 @@ app.post('/getFeelingAndDiaryArchivesByUserId' , (req , res)=>{
     console.log(req.body)
 
 
-    const id = jwtDecription(req.cookies.token);
-
+    //const id = jwtDecription(req.cookies.token);
+    const id = jwtDecription(req.body.token);
     //tokenがundefinedだったらエラーを返す
     if (!id) {
         res.json({
@@ -1748,6 +1749,13 @@ app.post('/getFeelingArchiveByUserId' , (req , res)=>{
         })
         return
     }
+
+
+    moduleFordb.getFeelingArchive(id).then(result => {
+        console.log(result)
+    }).catch(error => {
+        console.log(error)
+    })
 
     
 })
@@ -1802,15 +1810,11 @@ app.post('/tokenCheck' , (req , res)=>{
             status: 400,
             message: "token undefind"
         })
-        return
-
-    }else if(id) {
-        res.json({
-            status: 200,
-            message: "token verified"
-        })
-        return
     }
+    res.json({
+        status: 400,
+        message: "token undefind"
+    })
 })
 
 app.listen(PORT, () => {

@@ -447,7 +447,7 @@ Content-Type: application/json
     "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
     "data":{
         "todoId":"1",
-        "checkInDateTime":"2021-12-01T03:24:00",
+        "checkInDateTime":"2021-12-02T03:24:00",
         "feelingAndDiary":{
             "diaryFlag":true,
             "feelingFlag":true,
@@ -493,7 +493,13 @@ Content-Type: application/json
     "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
 }
 
+###
 
+POST http://localhost/api/getFeelingArchiveByUserId
+
+{
+    "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
+}
 
 
 

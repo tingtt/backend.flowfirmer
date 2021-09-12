@@ -6,6 +6,7 @@ var request = require("request");
 const moduleFordb = require('./dbmodule');
 const app = express();
 const cookieParser = require('cookie-parser');
+const { json } = require("body-parser");
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({
@@ -1757,9 +1758,21 @@ app.post('/getFeelingArchiveByUserId' , (req , res)=>{
 
 
     moduleFordb.getFeelingArchive(id).then(result => {
+        console.log("getFeelingArchiveの結果")
         console.log(result)
+        res.json({
+            status: 200,
+            data: result
+        })
+        
     }).catch(error => {
+        console.log("getFeelingArchive失敗")
         console.log(error)
+        res.json({
+            status: 400,
+            message: "失敗"
+        })
+        
     })
 
     

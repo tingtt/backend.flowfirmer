@@ -1584,6 +1584,8 @@ app.post('/saveArchive' , (req , res)=>{
     
     // console.log("cookie の中身")
     // console.log(req.cookies.token)
+    console.log("tokenの中身")
+    console.log(req.body.token)
 
     const id = jwtDecription(req.body.token);
     //const id = jwtDecription(req.cookies.token)
@@ -1734,9 +1736,12 @@ app.post('/getFeelingArchiveByUserId' , (req , res)=>{
         token : String(token)
     }
     */
-    console.log("getFeelingAndDiaryArchivesByUserId!!!!!!!!!!!");
+    console.log("getFeelingArchivesByUserId!!!!!!!!!!!");
     console.log("取得したJsonの中身")
     console.log(req.body)
+    console.log("取得したtoken")
+    console.log(req.body.token)
+
 
 
     const id = jwtDecription(req.body.token);

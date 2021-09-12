@@ -98,7 +98,8 @@ module.exports = class models{
             completed : Boolean,
             archived: Boolean,
             description: String,
-            repeatDateForMonthly: Number
+            repeatDateForMonthly: Number,
+            checkInDateTime: Date
         })
         const todo = mongoose.model('todos', todoSchema)
         return todo

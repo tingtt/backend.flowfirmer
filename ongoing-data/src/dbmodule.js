@@ -205,7 +205,8 @@ exports.updateTodoByObjectId = async (id, json) => {
             completed: json.completed,
             archived: json.archived,
             description: json.description,
-            repeatDateForMonthly: json.repeatDateForMonthly
+            repeatDateForMonthly: json.repeatDateForMonthly,
+            checkInDateTime: json.checkInDateTime
         }
     })
     return update
@@ -332,7 +333,7 @@ exports.getOutcomeArchiveByCroup = async (id) => {
 exports.getFeelingArchive = async (id) => {
     const result = await FeelingAndDiaryArchive.find({
         userId: id
-    },'positiveValue negativeValue checkInDateTime').sort({checkInDateTime: 'asce'})
+    },'positiveValue negativeValue checkInDateTime').sort({checkInDateTime: 1})
     return result
 }
 

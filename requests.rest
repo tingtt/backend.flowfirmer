@@ -496,10 +496,13 @@ Content-Type: application/json
 ###
 
 POST http://localhost/api/getFeelingArchiveByUserId
+Content-Type: application/json
 
 {
     "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg"
 }
+
+###
 
 
 

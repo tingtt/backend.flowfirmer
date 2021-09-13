@@ -62,13 +62,13 @@ var checkArrayEmptyOrNot = (array) => {
  */
 var groupByOutcomeId = (data) => {
     console.log("function groupByOutcomeId")
-    var res = [];
+    var ret = [];
     // Calc for `res.dataTotal.amount`
     var totalAmount = 0;
 
     data.forEach(element => {
         // Find index in object with outcomeId.
-        var idx = res.length == 0 ? -1 : res.findIndex(value => value.outcomeId == element.outcomeId)
+        var idx = ret.length == 0 ? -1 : ret.findIndex(value => value.outcomeId == element.outcomeId)
         // Same OutcomeScheme's data not exist.
         if (idx == -1) {
             // Get info. (Target, OutcomeScheme)
@@ -82,7 +82,7 @@ var groupByOutcomeId = (data) => {
                 totalFlg = outcome.totalFlg == 'Sum'
 
                 // Push object and get index.
-                idx = res.push({
+                idx = ret.push({
                     targetId: element.outcomeId,
                     outcomeId: element.outcomeId,
                     title: element.outcomeId,
@@ -93,13 +93,13 @@ var groupByOutcomeId = (data) => {
                 }) - 1;
 
                 // normal graph data.
-                res[idx].data.push({
+                ret[idx].data.push({
                     time: element.checkInDateTime,
                     amount: element.value
                 });
                 // total graph data.
                 totalAmount += element.value;
-                res[idx].dataTotal.push({
+                ret[idx].dataTotal.push({
                     time: element.checkInDateTime,
                     amount: totalAmount
                 });
@@ -110,19 +110,19 @@ var groupByOutcomeId = (data) => {
             return;
         }
         // normal graph data.
-        res[idx].data.push({
+        ret[idx].data.push({
             time: element.checkInDateTime,
             amount: element.value
         });
         // total graph data.
         totalAmount += element.value;
-        res[idx].dataTotal.push({
+        ret[idx].dataTotal.push({
             time: element.checkInDateTime,
             amount: totalAmount
         });
     });
 
-    return res;
+    return ret;
 }
 
 /*

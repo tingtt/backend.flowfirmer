@@ -103,7 +103,10 @@ var groupByOutcomeId = (data) => {
                     time: element.checkInDateTime,
                     amount: totalAmount
                 });
-            });
+            }).catch(error => {
+                console.log("エラー")
+                console.log(error)
+            })
             return;
         }
         // normal graph data.
@@ -453,7 +456,8 @@ app.post('/saveTarget' , (req , res)=>{
     console.log(req.cookies.token)
     //data.id 追加忘れない！！！！！！！！！！！！！！
     //const id = jwtDecription(req.body.token);
-    const id = jwtDecription(req.cookies.token)
+    //const id = jwtDecription(req.cookies.token)
+    const id = jwtDecription(req.body.token)
 
    //tokenがundefinedだったらエラーを返す
     if (!id) {
@@ -1660,7 +1664,8 @@ app.post('/getOutcomeArchiveByUserId' , (req , res)=>{
     console.log("getOutcomeArchivesByUserId!!!!!!!!!!!");
     console.log("取得したJsonの中身")
     console.log(req.body)
-    const id = jwtDecription(req.cookies.token);
+    //const id = jwtDecription(req.cookies.token);
+    const id = jwtDecription(req.body.token);
 
 
     //tokenがundefinedだったらエラーを返す

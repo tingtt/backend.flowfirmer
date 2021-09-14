@@ -40,7 +40,7 @@ var checkArrayEmptyOrNot = (array) => {
 
 
 var deleteOutcomeAndFeeling = (id, todoId) => {
-    const flag = false
+    var flag = false
 
     console.log("function deleteOutcomeAndFeeling")
     moduleFordb.deleteOutcomeArchiveByTodoId(id, todoId).then(result => {

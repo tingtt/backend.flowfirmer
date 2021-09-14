@@ -461,8 +461,8 @@ app.post('/saveTarget' , (req , res)=>{
     console.log(req.cookies.token)
     //data.id 追加忘れない！！！！！！！！！！！！！！
     //const id = jwtDecription(req.body.token);
-    //const id = jwtDecription(req.cookies.token)
-    const id = jwtDecription(req.body.token)
+    const id = jwtDecription(req.cookies.token)
+    //const id = jwtDecription(req.body.token)
 
    //tokenがundefinedだったらエラーを返す
     if (!id) {
@@ -1625,8 +1625,8 @@ app.post('/saveArchive' , (req , res)=>{
     console.log("tokenの中身")
     console.log(req.body.token)
 
-    const id = jwtDecription(req.body.token);
-    //const id = jwtDecription(req.cookies.token)
+    //const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token)
 
     //tokenがundefinedだったらエラーを返す
     if (!id) {
@@ -1698,7 +1698,7 @@ app.post('/getOutcomeArchiveByUserId' , (req , res)=>{
     console.log("取得したJsonの中身")
     console.log(req.body)
     //const id = jwtDecription(req.cookies.token);
-    const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token);
 
 
     //tokenがundefinedだったらエラーを返す
@@ -1742,7 +1742,7 @@ app.post('/getFeelingAndDiaryArchivesByUserId' , (req , res)=>{
 
 
     //const id = jwtDecription(req.cookies.token);
-    const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token);
     //tokenがundefinedだったらエラーを返す
     if (!id) {
         res.json({
@@ -1783,7 +1783,7 @@ app.post('/getFeelingArchiveByUserId' , (req , res)=>{
 
 
 
-    const id = jwtDecription(req.body.token);
+    const id = jwtDecription(req.cookies.token);
 
     //tokenがundefinedだったらエラーを返す
     if (!id) {

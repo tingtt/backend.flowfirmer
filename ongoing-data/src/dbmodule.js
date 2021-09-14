@@ -337,3 +337,20 @@ exports.getFeelingArchive = async (id) => {
     return result
 }
 
+exports.deleteOutcomeArchiveByTodoId = async (id, todoId) => {
+    const result = await OutcomeArchive.deleteOne({
+        userId: id,
+        refType: "todo",
+        refId: todoId
+    })
+    return result
+}
+
+exports.deleteFeelingArchiveByTodoId = async (id, todoId) => {
+    const result = await FeelingAndDiaryArchive.deleteOne({
+        userId: id,
+        refType: "todo",
+        refId:todoId
+    })
+    return result
+}

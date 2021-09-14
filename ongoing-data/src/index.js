@@ -40,6 +40,8 @@ var checkArrayEmptyOrNot = (array) => {
 
 
 var deleteOutcomeAndFeeling = (id, todoId) => {
+    const flag = false
+
     console.log("function deleteOutcomeAndFeeling")
     moduleFordb.deleteOutcomeArchiveByTodoId(id, todoId).then(result => {
         console.log("deleteOutcomeArchiveByTodoId成功")
@@ -48,19 +50,21 @@ var deleteOutcomeAndFeeling = (id, todoId) => {
         moduleFordb.deleteFeelingArchiveByTodoId(id, todoId).then(result => {
             console.log("deleteFeelingArchiveByTodoId成功")
             console.log(result)
-            return true
+            flag = true
 
         }).catch(error => {
             console.log("deleteFeelingArchiveByTodoId失敗")
             console.log(error)
-            return false
+            flag = false
         })
 
     }).catch(error => {
         console.log("deleteOutcomeArchiveByTodoId失敗")
         console,log(error)
-        return false
+        flag = false
     })
+
+    return flag
 
 }
 /**

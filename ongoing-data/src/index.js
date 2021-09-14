@@ -38,35 +38,6 @@ var checkArrayEmptyOrNot = (array) => {
     if (array.length) return false //要素数１以上の場合
 }
 
-
-var deleteOutcomeAndFeeling = (id, todoId) => {
-    var flag = false
-
-    console.log("function deleteOutcomeAndFeeling")
-    moduleFordb.deleteOutcomeArchiveByTodoId(id, todoId).then(result => {
-        console.log("deleteOutcomeArchiveByTodoId成功")
-        console.log(result)
-
-        moduleFordb.deleteFeelingArchiveByTodoId(id, todoId).then(result => {
-            console.log("deleteFeelingArchiveByTodoId成功")
-            console.log(result)
-            flag = true
-
-        }).catch(error => {
-            console.log("deleteFeelingArchiveByTodoId失敗")
-            console.log(error)
-            flag = false
-        })
-
-    }).catch(error => {
-        console.log("deleteOutcomeArchiveByTodoId失敗")
-        console,log(error)
-        flag = false
-    })
-
-    return flag
-
-}
 /**
  *
  * @param OutcomeArchive[] data
@@ -230,6 +201,11 @@ app.post("/test", (req, res) => {
     console.log("ONGOING-DATA:newUserReg postDataStr="+postDataStr)
     var id = req.body.id
     console.log("id====="+id)
+
+    const bbb = aaa(jsonTest);
+
+    console.log(bbb)
+    res.json({status: 200})
 
 });
 
@@ -1219,20 +1195,37 @@ app.post('/deleteTodoByObjectId' , (req , res)=>{
         console.log("deleteTodoByObjectIdの内容")
         console.log(result)
 
-        const flag = deleteOutcomeAndFeeling(id, req.body.data._id);
-        if (!flag) {
+        moduleFordb.deleteOutcomeArchiveByTodoId(id, req.body.data._id).then(result => {
+            console.log("deleteOutcomeArchiveByTodoId成功")
+            console.log(result)
+    
+            moduleFordb.deleteFeelingArchiveByTodoId(id, req.body.data._id).then(result => {
+                console.log("deleteFeelingArchiveByTodoId成功")
+                console.log(result)
+                res.json({
+                    status: 200,
+                    message: "todo, outcome, feeling削除成功"
+                })
+    
+            }).catch(error => {
+                console.log("deleteFeelingArchiveByTodoId失敗")
+                console.log(error)
+
+                res.json({
+                    status: 400,
+                    message: "todo, outcome, feeling削除失敗"
+                })
+                
+            })
+    
+        }).catch(error => {
+            console.log("deleteOutcomeArchiveByTodoId失敗")
+            console,log(error)
             res.json({
                 status: 400,
-                message: "todo, outcomeArchive, feelingAndDiaryArchive, 削除失敗"
+                message: "todo, outcome, 削除失敗"
             })
-            return
-        }
-
-        res.json({
-            status: 200,
-            meassage: "todo, outcomeArchive, feelingAndDiaryArchive, 削除成功"
         })
-
     }).catch(error => {
         console.log("deleteTodoByObjectId失敗")
         console.log(error)

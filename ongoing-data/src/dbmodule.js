@@ -340,7 +340,7 @@ exports.getFeelingArchive = async (id) => {
 exports.deleteOutcomeArchiveByTodoId = async (id, todoId) => {
     const result = await OutcomeArchive.deleteOne({
         userId: id,
-        refType: "todo",
+        refType: "ToDo",
         refId: todoId
     })
     return result

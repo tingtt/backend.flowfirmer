@@ -614,6 +614,72 @@ app.post('/updateTarget' , (req , res)=>{
         })
 })
 
+app.post('/saveOutcomeScheme', (req, res) => {
+    /*
+    受け取るJSON
+    {
+        targetId: ObjectId,
+        outcome: {
+            name : String,
+            unitName : String,
+            statisticsRule : String,
+            defaultValue : Number,
+            targetValue: Number
+        }
+    }
+     */
+
+    console.log("saveOutcomeScheme!!!!");
+    console.log("受け取ったJson");
+    console.log(req.body);
+    console.log("cookie の中身");
+    console.log(req.cookies.token);
+
+    // userIdの復号
+    const userId = jwtDecription(req.cookies.token);
+    if (!userId) {
+        // 復号失敗
+        res.json({
+            status: 400,
+            message: "token undefined"
+        })
+        return;
+    }
+
+    // mongoに追加
+    moduleFordb.addOutcomeScheme(userId, req.body.targetId, req.body.outcome)
+    .then(_ => {
+        // dump updated Target.
+        moduleFordb.getTargetByTargetId(req.body.targetId)
+        .then(target => {
+            res.json({
+                status: 200,
+                message: "追加しました",
+                objectId: (() => {
+                    if (target.outcomes[target.outcomes.length - 1].name == req.body.outcome.name) {
+                        return target.outcomes[target.outcomes.length - 1]._id;
+                    } else {
+                        const outcome = target.outcomes.find(outcome => outcome.name == req.body.outcome.name);
+                        if (outcome == undefined) {
+                            return outcome._id;
+                        }
+                        console.log("Error: Cannot find stored 'OutcomeScheme'.");
+                        return "";
+                    }
+                })()
+            })
+        })
+
+    }).catch(error =>{
+        console.log("saveOutcomeScheme失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "追加できませんでした"
+        })
+    })
+})
+
 app.post('/deleteTarget' , (req , res)=>{
     /*
     受け取るJson
@@ -1720,6 +1786,7 @@ app.post('/getOutcomeArchiveByUserId' , (req , res)=>{
                 status: 200,
                 data: temp
             })
+        });
     }).catch(error => {
         console.log("getOutcomeArchive失敗")
         console.log(error)

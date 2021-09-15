@@ -74,6 +74,11 @@ exports.getTargetByUserId = async (id)=>{
     return result
 }
 
+exports.getTargetByTargetId = async (targetId) => {
+    const result = await Target.findOne({ _id: targetId });
+    return result;
+}
+
 exports.getTargetByOutcomeId = async (id) => {
     const result = await Target.findOne({
         'outcomes._id': id
@@ -100,6 +105,15 @@ exports.updateOnlyOutcomesInTargetByObjectId = async (id, json)=>{
             outcomes: json.outcomes
         }
     })
+}
+
+exports.addOutcomeScheme = async (userId, targetId, outcome) => {
+    await Target.updateOne(
+        { _id: targetId, userId: userId },
+        {
+            $push: { outcomes: outcome }
+        }
+    )
 }
 
 exports.deleteTargetByObjectId = async (id, objectId)=> {

@@ -60,13 +60,13 @@ var checkArrayEmptyOrNot = (array) => {
         ...
     ]
  */
-var groupByOutcomeId = (data) => {
+var groupByOutcomeId = async (data) => {
     console.log("function groupByOutcomeId")
     var ret = [];
     // Calc for `res.dataTotal.amount`
     var totalAmount = 0;
 
-    data.forEach(element => {
+    for (const element of data) {
         // Find index in object with outcomeId.
         var idx = ret.length == 0 ? -1 : ret.findIndex(value => value.outcomeId == element.outcomeId)
         // Same OutcomeScheme's data not exist.
@@ -75,7 +75,7 @@ var groupByOutcomeId = (data) => {
             var targetId = "";
             var unitName = "";
             var totalFlg = false;
-            moduleFordb.getTargetByOutcomeId(element.outcomeId).then((res) => {
+            await moduleFordb.getTargetByOutcomeId(element.outcomeId).then((res) => {
                 targetId = res._id;
                 const outcome = res.outcomes.find(outcome => outcome._id == element.outcomeId);
                 unitName = outcome.unitName;
@@ -83,9 +83,9 @@ var groupByOutcomeId = (data) => {
 
                 // Push object and get index.
                 idx = ret.push({
-                    targetId: element.outcomeId,
+                    targetId: targetId,
                     outcomeId: element.outcomeId,
-                    title: element.outcomeId,
+                    title: outcome.name,
                     unitName: unitName,
                     totalFlg: totalFlg,
                     data: [],
@@ -107,7 +107,7 @@ var groupByOutcomeId = (data) => {
                 console.log("エラー")
                 console.log(error)
             })
-            return;
+            continue;
         }
         // normal graph data.
         ret[idx].data.push({
@@ -120,7 +120,7 @@ var groupByOutcomeId = (data) => {
             time: element.checkInDateTime,
             amount: totalAmount
         });
-    });
+    }
 
     return ret;
 }
@@ -612,6 +612,72 @@ app.post('/updateTarget' , (req , res)=>{
                 message: "変更を適用に失敗しました"
             })
         })
+})
+
+app.post('/saveOutcomeScheme', (req, res) => {
+    /*
+    受け取るJSON
+    {
+        targetId: ObjectId,
+        outcome: {
+            name : String,
+            unitName : String,
+            statisticsRule : String,
+            defaultValue : Number,
+            targetValue: Number
+        }
+    }
+     */
+
+    console.log("saveOutcomeScheme!!!!");
+    console.log("受け取ったJson");
+    console.log(req.body);
+    console.log("cookie の中身");
+    console.log(req.cookies.token);
+
+    // userIdの復号
+    const userId = jwtDecription(req.cookies.token);
+    if (!userId) {
+        // 復号失敗
+        res.json({
+            status: 400,
+            message: "token undefined"
+        })
+        return;
+    }
+
+    // mongoに追加
+    moduleFordb.addOutcomeScheme(userId, req.body.targetId, req.body.outcome)
+    .then(_ => {
+        // dump updated Target.
+        moduleFordb.getTargetByTargetId(req.body.targetId)
+        .then(target => {
+            res.json({
+                status: 200,
+                message: "追加しました",
+                objectId: (() => {
+                    if (target.outcomes[target.outcomes.length - 1].name == req.body.outcome.name) {
+                        return target.outcomes[target.outcomes.length - 1]._id;
+                    } else {
+                        const outcome = target.outcomes.find(outcome => outcome.name == req.body.outcome.name);
+                        if (outcome == undefined) {
+                            return outcome._id;
+                        }
+                        console.log("Error: Cannot find stored 'OutcomeScheme'.");
+                        return "";
+                    }
+                })()
+            })
+        })
+
+    }).catch(error =>{
+        console.log("saveOutcomeScheme失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "追加できませんでした"
+        })
+    })
 })
 
 app.post('/deleteTarget' , (req , res)=>{
@@ -1713,11 +1779,14 @@ app.post('/getOutcomeArchiveByUserId' , (req , res)=>{
     moduleFordb.getOutcomeArchive(id).then(result => {
         console.log("以下getOutcomeArchiveの中身")
         console.log(result)
-        const temp = groupByOutcomeId(result);
-        res.json({
-            status: 200,
-            data: temp
-        })
+        groupByOutcomeId(result).then(temp => {
+            // console.log("GroupedInTarget");
+            // console.log(temp);
+            res.json({
+                status: 200,
+                data: temp
+            })
+        });
     }).catch(error => {
         console.log("getOutcomeArchive失敗")
         console.log(error)

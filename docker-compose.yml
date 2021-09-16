@@ -94,7 +94,7 @@ services:
       - ./proxy/log:/var/log/nginx
 
   next:
-    image: node:latest
+    image: node:12-buster
     working_dir: /next
     volumes:
       - "./next:/next"

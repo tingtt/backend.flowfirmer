@@ -1797,6 +1797,50 @@ app.post('/getOutcomeArchiveByUserId' , (req , res)=>{
     })
 })
 
+app.post('/getOutcomeArchiveByTargetId', (req, res) => {
+    /*
+    受け取るJSON
+    {
+        targetId: String
+    }
+    */
+    console.log("getOutcomeArchiveByTargetId!!!!!!!!!!!");
+
+    console.log("取得したJsonの中身");
+    console.log(req.body);
+
+    const id = jwtDecription(req.cookies.token);
+
+    //tokenがundefinedだったらエラーを返す
+    if (!id) {
+        res.json({
+            status: 400,
+            message: "token undefind"
+        })
+        return
+    }
+
+    moduleFordb.getOutcomeArchiveByTargetId(id, req.body.targetId).then(result => {
+        console.log("以下getOutcomeArchiveByTargetIdの中身");
+        console.log(result);
+        groupByOutcomeId(result).then(temp => {
+            // console.log("GroupedInTarget");
+            // console.log(temp);
+            res.json({
+                status: 200,
+                data: temp
+            })
+        });
+    }).catch(error => {
+        console.log("getOutcomeArchive失敗")
+        console.log(error)
+        res.json({
+            status: 400,
+            message: "取得失敗"
+        })
+    })
+})
+
 //cookie未対応
 app.post('/getFeelingAndDiaryArchivesByUserId' , (req , res)=>{
     /*

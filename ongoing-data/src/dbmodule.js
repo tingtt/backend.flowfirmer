@@ -329,6 +329,21 @@ exports.getOutcomeArchive = async (id) => {
     })
     return result
 }
+
+exports.getOutcomeArchiveByTargetId = async (userId, targetId) => {
+    const outcomeIds = []
+    await exports.getTargetByTargetId(targetId).then(res => {
+        // Targetに含まれているOutcomeSchemeのId
+        res.outcomes.forEach(outcome => {
+            outcomeIds.push(outcome._id)
+        });
+    })
+    return await OutcomeArchive.find({
+        userId: userId,
+        outcomeId: { $in: outcomeIds }
+    })
+}
+
 ////test 用　feelingArchive取得
 exports.getFeelingAndDiaryArchive = async (id) => {
     const result = await FeelingAndDiaryArchive.find({

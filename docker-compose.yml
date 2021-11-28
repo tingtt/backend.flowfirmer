@@ -5,7 +5,7 @@ services:
       context: ./login
       dockerfile: Dockerfile
     ports:
-      - "5000"
+      - "5000:5000"
     volumes:
       - "./login:/projects"
     tty: true
@@ -70,7 +70,7 @@ services:
       dockerfile: Dockerfile
     container_name: ongoing-data
     ports:
-      - "4003"
+      - "4003:4003"
     environment:
       - DBHOST=mongo
       - DBPORT=27017
@@ -81,17 +81,17 @@ services:
     depends_on:
       - mongo
 
-  nginx:
-    image: nginx
-    depends_on:
-      - flask
-      - ongoing-data
-      - next
-    ports:
-      - "80:80"
-    volumes:
-      - ./proxy/default.conf:/etc/nginx/conf.d/default.conf
-      - ./proxy/log:/var/log/nginx
+  # nginx:
+  #   image: nginx
+  #   depends_on:
+  #     - flask
+  #     - ongoing-data
+  #     - next
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./proxy/default.conf:/etc/nginx/conf.d/default.conf
+  #     - ./proxy/log:/var/log/nginx
 
   next:
     image: node:12-buster
@@ -99,8 +99,6 @@ services:
     volumes:
       - "./next:/next"
     ports:
-      - "3000"
+      - "3200:3000"
     command: >
-      sh -c "
-      npm install && npm run dev
-      "
+      sh -c " npm install && npm run dev "
